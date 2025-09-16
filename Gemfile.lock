@@ -74,6 +74,9 @@ GEM
       uri (>= 0.13.1)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    annotate (2.6.5)
+      activerecord (>= 2.3.0)
+      rake (>= 0.8.7)
     ast (2.4.3)
     base64 (0.3.0)
     bcrypt_pbkdf (1.1.1)
@@ -94,6 +97,18 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    caxlsx (4.4.0)
+      htmlentities (~> 4.3, >= 4.3.4)
+      marcel (~> 1.0)
+      nokogiri (~> 1.10, >= 1.10.4)
+      rubyzip (>= 2.4, < 4)
+    commonmarker (2.4.0)
+      rb_sys (~> 0.9)
+    commonmarker (2.4.0-aarch64-linux)
+    commonmarker (2.4.0-aarch64-linux-musl)
+    commonmarker (2.4.0-arm64-darwin)
+    commonmarker (2.4.0-x86_64-linux)
+    commonmarker (2.4.0-x86_64-linux-musl)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.4)
     crass (1.0.6)
@@ -113,6 +128,7 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    htmlentities (4.3.4)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.2.2)
@@ -244,6 +260,9 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.3.0)
+    rake-compiler-dock (1.9.1)
+    rb_sys (0.9.117)
+      rake-compiler-dock (= 1.9.1)
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
@@ -251,6 +270,10 @@ GEM
     reline (0.6.2)
       io-console (~> 0.5)
     rexml (3.4.4)
+    roo (1.13.2)
+      nokogiri
+      rubyzip
+      spreadsheet (> 0.6.4)
     rubocop (1.80.2)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
@@ -279,6 +302,7 @@ GEM
       rubocop (>= 1.72)
       rubocop-performance (>= 1.24)
       rubocop-rails (>= 2.30)
+    ruby-ole (1.2.13.1)
     ruby-progressbar (1.13.0)
     rubyzip (3.1.0)
     securerandom (0.4.1)
@@ -304,6 +328,10 @@ GEM
       fugit (~> 1.11.0)
       railties (>= 7.1)
       thor (>= 1.3.1)
+    spreadsheet (1.3.4)
+      bigdecimal
+      logger
+      ruby-ole
     sqlite3 (2.7.3-aarch64-linux-gnu)
     sqlite3 (2.7.3-aarch64-linux-musl)
     sqlite3 (2.7.3-arm-linux-gnu)
@@ -363,9 +391,12 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  annotate
   bootsnap
   brakeman
   capybara
+  caxlsx
+  commonmarker
   debug
   importmap-rails
   jbuilder
@@ -373,6 +404,7 @@ DEPENDENCIES
   propshaft
   puma (>= 5.0)
   rails (~> 8.0.2, >= 8.0.2.1)
+  roo
   rubocop-rails-omakase
   selenium-webdriver
   solid_cable

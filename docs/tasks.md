@@ -4,7 +4,7 @@ Rails 8 ベースの Pivotal Tracker Viewer を完成させるためのタスク
 
 ## フェーズ 0: 開発環境整備
 - [x] Rails 8 プロジェクトのセットアップ確認 (`bin/setup`, `bin/dev` が動作する状態か)
-- [ ] 依存 Gem の選定と追加（`roo`, `caxlsx`, `commonmarker` or `redcarpet`, `annotate` 等必要に応じて）
+- [x] 依存 Gem の選定と追加（`roo`, `caxlsx`, `commonmarker` or `redcarpet`, `annotate` 等必要に応じて）
 - [ ] Rubocop / standardrb 等のコード整形ツール導入の要否判断
 
 ## フェーズ 1: データモデル & インポート基盤
