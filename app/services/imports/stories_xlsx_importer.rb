@@ -267,8 +267,13 @@ module Imports
     def time_value(value)
       return if value.blank?
 
-      if value.respond_to?(:to_time)
+      case value
+      when Time
+        value.in_time_zone
+      when DateTime
         value.to_time.in_time_zone
+      when Date
+        Time.zone.local(value.year, value.month, value.day)
       else
         Time.zone.parse(value.to_s)
       end
