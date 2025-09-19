@@ -1,80 +1,112 @@
 <% provide(:title, t("epics.index.title")) %>
 
-<h1 class="mb-4"><%= t("epics.index.title") %></h1>
-
-<p><%= t("epics.index.description") %></p>
-
-<section class="epics-summary">
-  <div class="summary-card">
-    <h2><%= t("epics.index.summary_total_stories") %></h2>
-    <p class="summary-value"><%= number_with_delimiter(@summary[:stories]) %></p>
-    <p class="summary-sub"><%= t("epics.index.summary_accepted", count: @summary[:accepted]) %></p>
-  </div>
-  <div class="summary-card">
-    <h2><%= t("epics.index.summary_progress") %></h2>
-    <div class="summary-progress">
-      <div class="summary-progress__bar">
-        <div class="summary-progress__fill" style="width: <%= epic_summary_progress(@summary) %>%"></div>
+<div class="app-page">
+  <header class="app-header">
+    <div class="app-header__brand">
+      <span class="app-logo__mark">PT</span>
+      <div>
+        <h1><%= t("epics.index.title") %></h1>
+        <p><%= t("epics.index.description") %></p>
       </div>
-      <span class="summary-progress__text"><%= @summary[:accepted] %> / <%= @summary[:stories] %></span>
     </div>
-  </div>
-  <div class="summary-card">
-    <h2><%= t("epics.index.summary_points") %></h2>
-    <p class="summary-value"><%= @summary[:total_points] %> pt</p>
-    <p class="summary-sub"><%= t("epics.index.summary_points_detail", points: @summary[:accepted_points]) %></p>
-  </div>
-</section>
+    <nav class="app-header__actions">
+      <%= link_to t("common.back_to_stories"), stories_path, class: "button button--secondary" %>
+      <%= link_to t("stories.index.actions.import"), new_import_path, class: "button button--primary" %>
+    </nav>
+  </header>
 
-<section class="epics-layout">
-  <div class="epics-table-wrapper">
-    <table class="epics-table">
-      <thead>
-        <tr>
-          <th><%= t("epics.index.table_epic") %></th>
-          <th><%= t("epics.index.table_stories") %></th>
-          <th><%= t("epics.index.table_accepted") %></th>
-          <th><%= t("epics.index.table_progress") %></th>
-          <th><%= t("epics.index.table_points") %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @epics.each do |epic| %>
-          <tr>
-            <td>
-              <div class="epic-name">
-                <%= link_to epic.name, stories_path(filter: { labels: [epic.label].compact }), data: { turbo_frame: "stories_list" } %>
-                <% if epic.label.present? %>
-                  <span class="epic-label">#<%= epic.label %></span>
-                <% end %>
-              </div>
-            </td>
-            <td class="metric"><%= epic.stories_count %></td>
-            <td class="metric"><%= epic.accepted_count %></td>
-            <td class="metric">
-              <div class="progress-bar">
-                <div class="progress-bar__fill" style="width: <%= epic_progress_percentage(epic) %>%"></div>
-              </div>
-              <span class="progress-text"><%= epic_progress_text(epic) %></span>
-            </td>
-            <td class="metric">
-              <div><strong><%= t("epics.index.points_total", points: epic.total_points || 0) %></strong></div>
-              <div class="text-muted"><%= t("epics.index.points_accepted", points: epic.accepted_points || 0) %></div>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+  <section class="summary-grid" aria-label="<%= t("epics.index.summary_title") %>">
+    <article class="summary-card">
+      <h2><%= t("epics.index.summary_total_stories") %></h2>
+      <p class="summary-card__value"><%= number_with_delimiter(@summary[:stories]) %></p>
+      <p class="summary-card__sub"><%= t("epics.index.summary_accepted", count: @summary[:accepted]) %></p>
+    </article>
+    <article class="summary-card">
+      <h2><%= t("epics.index.summary_progress") %></h2>
+      <div class="summary-progress">
+        <div class="summary-progress__bar">
+          <div class="summary-progress__fill" style="width: <%= epic_summary_progress(@summary) %>%"></div>
+        </div>
+        <span class="summary-progress__text"><%= @summary[:accepted] %> / <%= @summary[:stories] %></span>
+      </div>
+    </article>
+    <article class="summary-card">
+      <h2><%= t("epics.index.summary_points") %></h2>
+      <p class="summary-card__value"><%= @summary[:total_points] %> pt</p>
+      <p class="summary-card__sub"><%= t("epics.index.summary_points_detail", points: @summary[:accepted_points]) %></p>
+    </article>
+    <article class="summary-card">
+      <h2><%= t("epics.index.summary_velocity") %></h2>
+      <p class="summary-card__value"><%= @summary[:average_points] %> pt</p>
+      <p class="summary-card__sub"><%= t("epics.index.summary_velocity_sub") %></p>
+    </article>
+  </section>
 
-  <aside class="epics-secondary">
-    <h2><%= t("epics.index.how_to") %></h2>
-    <ol>
-      <li><%= t("epics.index.how_to_1") %></li>
-      <li><%= t("epics.index.how_to_2") %></li>
-      <li><%= t("epics.index.how_to_3") %></li>
-    </ol>
+  <section class="app-layout">
+    <div class="panel">
+      <header class="panel__header">
+        <div>
+          <h2><%= t("epics.index.table_heading") %></h2>
+          <p><%= t("epics.index.table_subheading") %></p>
+        </div>
+        <div class="chip-group">
+          <span class="chip"><%= t("epics.index.chip_total", count: @summary[:epic_count]) %></span>
+          <span class="chip chip--muted"><%= t("epics.index.chip_filter_hint") %></span>
+        </div>
+      </header>
 
-    <%= link_to t("common.back_to_stories"), stories_path, class: "epics-back-link" %>
-  </aside>
-</section>
+      <div class="epics-table-wrapper">
+        <table class="epics-table">
+          <thead>
+            <tr>
+              <th><%= t("epics.index.table_epic") %></th>
+              <th><%= t("epics.index.table_stories") %></th>
+              <th><%= t("epics.index.table_accepted") %></th>
+              <th><%= t("epics.index.table_progress") %></th>
+              <th><%= t("epics.index.table_points") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @epics.each do |epic| %>
+              <tr>
+                <td>
+                  <div class="epic-name">
+                    <%= link_to epic.name, stories_path(filter: { labels: [epic.label].compact }), data: { turbo_frame: "stories_list" } %>
+                    <% if epic.label.present? %>
+                      <span class="epic-label">#<%= epic.label %></span>
+                    <% end %>
+                  </div>
+                </td>
+                <td class="metric"><%= epic.stories_count %></td>
+                <td class="metric"><%= epic.accepted_count %></td>
+                <td class="metric">
+                  <div class="progress-bar">
+                    <div class="progress-bar__fill" style="width: <%= epic_progress_percentage(epic) %>%"></div>
+                  </div>
+                  <span class="progress-text"><%= epic_progress_text(epic) %></span>
+                </td>
+                <td class="metric">
+                  <div><strong><%= t("epics.index.points_total", points: epic.total_points || 0) %></strong></div>
+                  <div class="text-muted"><%= t("epics.index.points_accepted", points: epic.accepted_points || 0) %></div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <aside class="panel panel--muted">
+      <h2><%= t("epics.index.how_to") %></h2>
+      <ol class="panel__list">
+        <li><%= t("epics.index.how_to_1") %></li>
+        <li><%= t("epics.index.how_to_2") %></li>
+        <li><%= t("epics.index.how_to_3") %></li>
+      </ol>
+
+      <div class="panel__cta">
+        <%= link_to t("stories.index.actions.import"), new_import_path, class: "button button--secondary" %>
+      </div>
+    </aside>
+  </section>
+</div>

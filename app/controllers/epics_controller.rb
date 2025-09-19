@@ -18,11 +18,16 @@ class EpicsController < ApplicationController
   private
 
   def build_summary(epics)
-    epics.each_with_object({ stories: 0, accepted: 0, total_points: 0, accepted_points: 0 }) do |epic, acc|
+    summary = epics.each_with_object({ stories: 0, accepted: 0, total_points: 0, accepted_points: 0 }) do |epic, acc|
       acc[:stories] += epic.stories_count.to_i
       acc[:accepted] += epic.accepted_count.to_i
       acc[:total_points] += epic.total_points.to_i
       acc[:accepted_points] += epic.accepted_points.to_i
     end
+
+    epic_count = epics.size.nonzero? || 1
+    summary[:average_points] = (summary[:accepted_points].to_f / epic_count).round(1)
+    summary[:epic_count] = epics.size
+    summary
   end
 end

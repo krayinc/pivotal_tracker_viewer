@@ -1,33 +1,54 @@
-<h1 class="mb-4"><%= t("imports.new.title") %></h1>
-
-<%= turbo_frame_tag "import_summary" do %>
-  <%= render "summary", summary: @summary %>
-<% end %>
-
-<section class="import-form">
-  <h2><%= t("imports.new.upload_heading") %></h2>
-  <p><%= t("imports.new.upload_description") %></p>
-
-  <%= form_with scope: :import, url: import_path, method: :post, multipart: true, data: { turbo_stream: true }, class: "upload-form" do |f| %>
-    <div class="upload-field">
-      <%= f.label :file, t("imports.new.file_label") %>
-      <%= f.file_field :file, accept: ".xlsx" %>
+<div class="app-page">
+  <header class="app-header">
+    <div class="app-header__brand">
+      <span class="app-logo__mark">PT</span>
+      <div>
+        <h1><%= t("imports.new.title") %></h1>
+        <p><%= t("imports.new.subtitle") %></p>
+      </div>
     </div>
-    <div class="upload-actions">
-      <%= f.submit t("imports.new.submit"), class: "stories-filter-submit" %>
-    </div>
+    <nav class="app-header__actions">
+      <%= link_to t("common.back_to_stories"), stories_path, class: "button button--secondary" %>
+    </nav>
+  </header>
+
+  <%= turbo_frame_tag "import_summary", class: "summary-grid" do %>
+    <%= render "summary", summary: @summary %>
   <% end %>
-</section>
 
-<section class="import-danger">
-  <h2><%= t("imports.new.danger_heading") %></h2>
-  <p><%= t("imports.new.danger_description") %></p>
-  <%= button_to t("imports.new.destroy_button"), import_path,
-                method: :delete,
-                data: { turbo_confirm: t("imports.confirm.destroy") },
-                class: "danger-button" %>
-</section>
+  <section class="app-layout">
+    <div class="panel">
+      <header class="panel__header">
+        <div>
+          <h2><%= t("imports.new.upload_heading") %></h2>
+          <p><%= t("imports.new.upload_description") %></p>
+        </div>
+      </header>
 
-<div class="mt-4">
-  <%= link_to t("common.back_to_stories"), stories_path, class: "epics-back-link" %>
+      <%= form_with scope: :import, url: import_path, method: :post, multipart: true, data: { turbo_stream: true }, class: "upload-form" do |f| %>
+        <div class="input-group">
+          <%= f.label :file, t("imports.new.file_label") %>
+          <%= f.file_field :file, accept: ".xlsx", class: "input" %>
+        </div>
+        <div class="filter-actions">
+          <%= f.submit t("imports.new.submit"), class: "button button--primary" %>
+        </div>
+      <% end %>
+    </div>
+
+    <aside class="panel panel--muted">
+      <header class="panel__header">
+        <div>
+          <h2><%= t("imports.new.danger_heading") %></h2>
+          <p><%= t("imports.new.danger_description") %></p>
+        </div>
+      </header>
+      <div class="panel__cta">
+        <%= button_to t("imports.new.destroy_button"), import_path,
+                      method: :delete,
+                      data: { turbo_confirm: t("imports.confirm.destroy") },
+                      class: "button button--ghost" %>
+      </div>
+    </aside>
+  </section>
 </div>

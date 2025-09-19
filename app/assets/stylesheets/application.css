@@ -241,6 +241,13 @@ main {
   gap: clamp(20px, 3vw, 24px);
 }
 
+.panel--muted {
+  background: var(--surface-muted);
+  border-style: dashed;
+  border-color: rgba(148, 163, 184, 0.4);
+  box-shadow: none;
+}
+
 .panel__header {
   display: flex;
   flex-wrap: wrap;
@@ -322,6 +329,21 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+}
+
+.panel__cta {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 12px;
+}
+
+.panel__list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 /* Story cards */
@@ -618,25 +640,8 @@ main {
 }
 
 /* Imports */
-.import-summary-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 18px;
-}
-
-.import-form,
-.import-danger {
-  background: var(--surface);
-  border-radius: 18px;
-  border: 1px solid rgba(227, 232, 241, 0.8);
-  padding: 24px;
-  box-shadow: 0 20px 42px -38px var(--shadow);
-  margin-top: 24px;
-}
-
-.import-form h2,
-.import-danger h2 {
-  margin-bottom: 12px;
+ .import-summary-grid {
+  width: 100%;
 }
 
 .upload-form {
@@ -645,15 +650,9 @@ main {
   gap: 18px;
 }
 
-.upload-field label {
-  display: block;
-  margin-bottom: 6px;
-  color: var(--text-muted);
-  font-weight: 600;
-}
-
-.upload-field input[type="file"] {
-  width: 100%;
+.upload-form .input {
+  padding: 0.6rem;
+  height: auto;
 }
 
 .danger-button {
