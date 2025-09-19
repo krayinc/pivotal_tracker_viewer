@@ -73,6 +73,7 @@ ja:
       state_label: "状態"
       priority_label: "優先度"
       labels_label: "ラベル"
+      labels_search_placeholder: "ラベルを検索"
       owners_label: "担当者"
       created_from_label: "作成日 (From)"
       created_to_label: "作成日 (To)"

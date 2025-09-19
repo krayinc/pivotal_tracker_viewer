@@ -1,11 +1,25 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Handles label token selection and auto submits the enclosing form after a short delay.
+// Searchable label picker that submits the filter form automatically.
 export default class extends Controller {
+  static targets = ["search", "list", "item"]
   static values = { delay: Number }
 
   connect() {
     this.submit = this.submit.bind(this)
+  }
+
+  search(event) {
+    const term = event.target.value.trim().toLowerCase()
+
+    this.itemTargets.forEach(element => {
+      const name = element.dataset.name || ""
+      element.hidden = term && !name.includes(term)
+    })
+  }
+
+  toggle() {
+    this.submit()
   }
 
   submit() {
