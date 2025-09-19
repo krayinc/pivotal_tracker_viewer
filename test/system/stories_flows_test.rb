@@ -17,7 +17,7 @@ class StoriesFlowsTest < ApplicationSystemTestCase
     assert_selector ".story-card", minimum: 1
 
     fill_in "キーワード", with: "ログイン"
-    select "初回設定", from: "ラベル"
+    find("label.label-token", text: "初回設定").click
     click_button "絞り込む"
 
     assert_selector ".story-card", count: 1

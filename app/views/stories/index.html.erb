@@ -88,14 +88,19 @@
                          class: "input" %>
           </div>
 
-          <div class="input-group input-group--multiselect">
+          <div class="input-group input-group--labels" data-controller="label-filter" data-label-filter-delay-value="150">
             <%= f.label :labels, t("stories.index.labels_label") %>
-            <%= f.select :labels,
-                         options_for_select(@available_labels, @filter_params[:labels]),
-                         {},
-                         multiple: true,
-                         size: 4,
-                         class: "input input--multiselect" %>
+            <div class="label-token-list">
+              <% selected_labels = Array(@filter_params[:labels]) %>
+              <% @available_labels.each_with_index do |label, index| %>
+                <% element_id = "filter_labels_#{index}" %>
+                <label for="<%= element_id %>" class="label-token">
+                  <%= check_box_tag "filter[labels][]", label, selected_labels.include?(label), id: element_id,
+                    data: { action: "change->label-filter#submit" } %>
+                  <span><%= label %></span>
+                </label>
+              <% end %>
+            </div>
           </div>
 
           <div class="input-group input-group--multiselect">

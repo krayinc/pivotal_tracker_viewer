@@ -50,6 +50,33 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     assert_select "a", text: "データの展開を unzip で行うようにする"
   end
 
+  test "filters stories by multiple labels using AND" do
+    base_position = Story.maximum(:import_position).to_i + 1
+
+    matching_story = Story.create!(
+      tracker_id: 9_100_001,
+      title: "複数ラベルのストーリー",
+      story_type: "feature",
+      import_position: base_position
+    )
+    %w[label_a label_b].each { |name| matching_story.story_labels.create!(name: name) }
+
+    non_matching_story = Story.create!(
+      tracker_id: 9_100_002,
+      title: "単一ラベルのストーリー",
+      story_type: "feature",
+      import_position: base_position + 1
+    )
+    non_matching_story.story_labels.create!(name: "label_a")
+
+    get stories_url(filter: { labels: %w[label_a label_b] })
+
+    assert_response :success
+    assert_select ".story-card", 1
+    assert_select "a", text: matching_story.title
+    assert_select "a", text: non_matching_story.title, count: 0
+  end
+
   test "filters by created date range" do
     get stories_url(filter: { created_from: "2017-01-01", created_to: "2018-01-01" })
 

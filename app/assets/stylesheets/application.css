@@ -325,6 +325,56 @@ main {
   min-height: 140px;
 }
 
+.input-group--labels {
+  gap: 12px;
+}
+
+.label-token-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.label-token {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.label-token:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.label-token input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+
+.label-token span {
+  pointer-events: none;
+}
+
+.label-token input[type="checkbox"]:checked + span {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.label-token input[type="checkbox"]:focus-visible + span {
+  outline: 2px solid rgba(37, 99, 235, 0.4);
+  outline-offset: 4px;
+}
+
 .filter-actions {
   display: flex;
   flex-wrap: wrap;

@@ -41,7 +41,11 @@ class StoriesQuery
     return relation if labels.empty?
 
     @join_applied = true
-    relation.left_joins(:story_labels).where(story_labels: { name: labels })
+    relation
+      .left_joins(:story_labels)
+      .where(story_labels: { name: labels })
+      .group("stories.id")
+      .having("COUNT(DISTINCT story_labels.name) >= ?", labels.uniq.size)
   end
 
   def filter_story_type(relation)
