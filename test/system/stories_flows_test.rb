@@ -14,16 +14,16 @@ class StoriesFlowsTest < ApplicationSystemTestCase
 
     visit stories_path
 
-    assert_selector "table tbody tr", minimum: 1
+    assert_selector ".story-card", minimum: 1
 
     fill_in "キーワード", with: "ログイン"
     select "初回設定", from: "ラベル"
     click_button "絞り込む"
 
-    assert_selector "table tbody tr", count: 1
+    assert_selector ".story-card", count: 1
 
     within "turbo-frame#story_detail" do
-      assert_text "ストーリーを選択"
+      assert_selector "div.detail-placeholder", text: I18n.t("stories.index.placeholder_detail")
     end
 
     click_link "ID/PWでログインできる"
@@ -51,7 +51,7 @@ class StoriesFlowsTest < ApplicationSystemTestCase
 
     click_link I18n.t("common.back_to_stories")
     assert_current_path stories_path
-    assert_selector "table tbody tr", minimum: 1
+    assert_selector ".story-card", minimum: 1
   end
 
   private

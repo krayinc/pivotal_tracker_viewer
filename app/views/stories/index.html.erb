@@ -1,97 +1,151 @@
 <% provide(:title, t("stories.index.title")) %>
 
-<h1 class="mb-4"><%= t("stories.index.title") %></h1>
-
-<p><%= t("stories.index.description") %></p>
-
-<%= form_with url: stories_path, method: :get, scope: :filter, local: true, class: "stories-filter" do |f| %>
-  <div class="stories-filter-grid">
-    <div class="stories-filter-field">
-      <%= f.label :q, t("stories.index.keyword_label") %>
-      <%= f.search_field :q, value: @filter_params[:q], placeholder: t("stories.index.keyword_placeholder"), class: "stories-filter-input" %>
+<div class="app-page">
+  <header class="app-header">
+    <div class="app-header__brand">
+      <span class="app-logo__mark">PT</span>
+      <div>
+        <h1><%= t("stories.index.title") %></h1>
+        <p><%= t("stories.index.description") %></p>
+      </div>
     </div>
+    <nav class="app-header__actions">
+      <%= link_to t("stories.index.actions.epics"), epics_path, class: "button button--secondary" %>
+      <%= link_to t("stories.index.actions.import"), new_import_path, class: "button button--primary" %>
+    </nav>
+  </header>
 
-    <div class="stories-filter-field">
-      <%= f.label :story_type, t("stories.index.story_type_label") %>
-      <%= f.select :story_type,
-                   options_for_select(@available_story_types, @filter_params[:story_type]),
-                   { include_blank: t("stories.index.no_selection") },
-                   class: "stories-filter-input" %>
-    </div>
-
-    <div class="stories-filter-field">
-      <%= f.label :current_state, t("stories.index.state_label") %>
-      <%= f.select :current_state,
-                   options_for_select(@available_states, @filter_params[:current_state]),
-                   { include_blank: t("stories.index.no_selection") },
-                   class: "stories-filter-input" %>
-    </div>
-
-    <div class="stories-filter-field">
-      <%= f.label :priority, t("stories.index.priority_label") %>
-      <%= f.select :priority,
-                   options_for_select(@available_priorities, @filter_params[:priority]),
-                   { include_blank: t("stories.index.no_selection") },
-                   class: "stories-filter-input" %>
-    </div>
-
-    <div class="stories-filter-field">
-      <%= f.label :labels, t("stories.index.labels_label") %>
-      <%= f.select :labels,
-                   options_for_select(@available_labels, @filter_params[:labels]),
-                   {},
-                   multiple: true,
-                   size: 4,
-                   class: "stories-filter-input" %>
-    </div>
-
-    <div class="stories-filter-field">
-      <%= f.label :owners, t("stories.index.owners_label") %>
-      <%= f.select :owners,
-                   options_for_select(@available_owners, @filter_params[:owners]),
-                   {},
-                   multiple: true,
-                   size: 4,
-                   class: "stories-filter-input" %>
-    </div>
-
-    <div class="stories-filter-field">
-      <%= f.label :created_from, t("stories.index.created_from_label") %>
-      <%= f.date_field :created_from, value: @filter_params[:created_from], class: "stories-filter-input" %>
-    </div>
-
-    <div class="stories-filter-field">
-      <%= f.label :created_to, t("stories.index.created_to_label") %>
-      <%= f.date_field :created_to, value: @filter_params[:created_to], class: "stories-filter-input" %>
-    </div>
-
-    <div class="stories-filter-field">
-      <%= f.label :accepted_from, t("stories.index.accepted_from_label") %>
-      <%= f.date_field :accepted_from, value: @filter_params[:accepted_from], class: "stories-filter-input" %>
-    </div>
-
-    <div class="stories-filter-field">
-      <%= f.label :accepted_to, t("stories.index.accepted_to_label") %>
-      <%= f.date_field :accepted_to, value: @filter_params[:accepted_to], class: "stories-filter-input" %>
-    </div>
-  </div>
-
-  <div class="stories-filter-actions">
-    <%= f.submit t("stories.index.submit"), class: "stories-filter-submit" %>
-    <%= link_to t("stories.index.reset"), stories_path, class: "stories-filter-reset" %>
-  </div>
-<% end %>
-
-<div class="stories-layout">
-  <section class="stories-list">
-    <%= render "list_frame", stories: @stories, next_page: @next_page, filter_params: @filter_params %>
+  <section class="summary-grid" aria-label="<%= t("stories.index.summary.title") %>">
+    <article class="summary-card">
+      <h2><%= t("stories.index.summary.stories_title") %></h2>
+      <p class="summary-card__value"><%= number_with_delimiter(@summary[:stories_count]) %></p>
+      <p class="summary-card__sub"><%= t("stories.index.summary.labels", count: @summary[:labels_count]) %></p>
+    </article>
+    <article class="summary-card">
+      <h2><%= t("stories.index.summary.epics_title") %></h2>
+      <p class="summary-card__value"><%= number_with_delimiter(@summary[:epics_count]) %></p>
+      <p class="summary-card__sub"><%= t("stories.index.summary.accepted", count: @summary[:accepted_count], ratio: @summary[:accepted_ratio]) %></p>
+    </article>
+    <article class="summary-card">
+      <h2><%= t("stories.index.summary.last_import_title") %></h2>
+      <p class="summary-card__value summary-card__value--small">
+        <% if @summary[:last_imported_at] %>
+          <%= l(@summary[:last_imported_at], format: :long) %>
+        <% else %>
+          <%= t("stories.index.summary.not_imported") %>
+        <% end %>
+      </p>
+      <p class="summary-card__sub"><%= t("stories.index.summary.last_import_label") %></p>
+    </article>
+    <article class="summary-card">
+      <h2><%= t("stories.index.summary.owners_title") %></h2>
+      <p class="summary-card__value"><%= number_with_delimiter(@summary[:owners_count]) %></p>
+      <p class="summary-card__sub"><%= t("stories.index.summary.owners_sub") %></p>
+    </article>
   </section>
 
-  <aside class="stories-detail">
-    <%= turbo_frame_tag "story_detail" do %>
-      <p class="story-detail-placeholder">
-        <%= t("stories.index.placeholder_detail") %>
-      </p>
-    <% end %>
-  </aside>
+  <main class="app-layout">
+    <section class="panel stories-panel">
+      <header class="panel__header">
+        <div>
+          <h2><%= t("stories.index.search_heading") %></h2>
+          <p><%= t("stories.index.search_subheading") %></p>
+        </div>
+        <div class="chip-group">
+          <span class="chip"><%= t("stories.index.chip_latest", count: StoriesController::PER_PAGE) %></span>
+          <span class="chip chip--muted"><%= t("stories.index.chip_auto") %></span>
+        </div>
+      </header>
+
+      <%= form_with url: stories_path, method: :get, scope: :filter, local: true, class: "filter-card" do |f| %>
+        <div class="filter-grid">
+          <div class="input-group">
+            <%= f.label :q, t("stories.index.keyword_label") %>
+            <%= f.search_field :q, value: @filter_params[:q], placeholder: t("stories.index.keyword_placeholder"), class: "input" %>
+          </div>
+
+          <div class="input-group">
+            <%= f.label :story_type, t("stories.index.story_type_label") %>
+            <%= f.select :story_type,
+                         options_for_select(@available_story_types, @filter_params[:story_type]),
+                         { include_blank: t("stories.index.no_selection") },
+                         class: "input" %>
+          </div>
+
+          <div class="input-group">
+            <%= f.label :current_state, t("stories.index.state_label") %>
+            <%= f.select :current_state,
+                         options_for_select(@available_states, @filter_params[:current_state]),
+                         { include_blank: t("stories.index.no_selection") },
+                         class: "input" %>
+          </div>
+
+          <div class="input-group">
+            <%= f.label :priority, t("stories.index.priority_label") %>
+            <%= f.select :priority,
+                         options_for_select(@available_priorities, @filter_params[:priority]),
+                         { include_blank: t("stories.index.no_selection") },
+                         class: "input" %>
+          </div>
+
+          <div class="input-group input-group--multiselect">
+            <%= f.label :labels, t("stories.index.labels_label") %>
+            <%= f.select :labels,
+                         options_for_select(@available_labels, @filter_params[:labels]),
+                         {},
+                         multiple: true,
+                         size: 4,
+                         class: "input input--multiselect" %>
+          </div>
+
+          <div class="input-group input-group--multiselect">
+            <%= f.label :owners, t("stories.index.owners_label") %>
+            <%= f.select :owners,
+                         options_for_select(@available_owners, @filter_params[:owners]),
+                         {},
+                         multiple: true,
+                         size: 4,
+                         class: "input input--multiselect" %>
+          </div>
+
+          <div class="input-group">
+            <%= f.label :created_from, t("stories.index.created_from_label") %>
+            <%= f.date_field :created_from, value: @filter_params[:created_from], class: "input" %>
+          </div>
+
+          <div class="input-group">
+            <%= f.label :created_to, t("stories.index.created_to_label") %>
+            <%= f.date_field :created_to, value: @filter_params[:created_to], class: "input" %>
+          </div>
+
+          <div class="input-group">
+            <%= f.label :accepted_from, t("stories.index.accepted_from_label") %>
+            <%= f.date_field :accepted_from, value: @filter_params[:accepted_from], class: "input" %>
+          </div>
+
+          <div class="input-group">
+            <%= f.label :accepted_to, t("stories.index.accepted_to_label") %>
+            <%= f.date_field :accepted_to, value: @filter_params[:accepted_to], class: "input" %>
+          </div>
+        </div>
+
+        <div class="filter-actions">
+          <%= f.submit t("stories.index.submit"), class: "button button--primary" %>
+          <%= link_to t("stories.index.reset"), stories_path, class: "button button--ghost" %>
+        </div>
+      <% end %>
+
+      <div class="story-list">
+        <%= render "list_frame", stories: @stories, next_page: @next_page, filter_params: @filter_params %>
+      </div>
+    </section>
+
+    <aside class="panel detail-panel">
+      <%= turbo_frame_tag "story_detail" do %>
+        <div class="detail-placeholder">
+          <p><%= t("stories.index.placeholder_detail") %></p>
+        </div>
+      <% end %>
+    </aside>
+  </main>
 </div>

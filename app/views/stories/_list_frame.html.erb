@@ -1,4 +1,5 @@
 <%= turbo_frame_tag "stories_list",
+                     class: "story-cards-frame",
                      data: { controller: "infinite-scroll", action: "turbo:frame-load->infinite-scroll#reset" } do %>
   <%= render "stories/list", stories: stories, next_page: next_page, filter_params: filter_params %>
 <% end %>

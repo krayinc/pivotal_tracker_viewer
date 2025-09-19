@@ -13,13 +13,13 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     get stories_url
     assert_response :success
     assert_select "h1", I18n.t("stories.index.title")
-    assert_select "form.stories-filter"
+    assert_select "form.filter-card"
     assert_select "turbo-frame#stories_list" do
-      assert_select "table tbody tr", minimum: 1
+      assert_select ".story-card", minimum: 1
     end
     assert_select "a", text: "ID/PWでログインできる"
     assert_select "turbo-frame#story_detail" do
-      assert_select "p", I18n.t("stories.index.placeholder_detail")
+      assert_select "div.detail-placeholder p", text: I18n.t("stories.index.placeholder_detail")
     end
   end
 
@@ -30,7 +30,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "turbo-frame#story_detail" do
       assert_select "h1", story.title
-      assert_select "div.story-detail-markdown"
+      assert_select "div.markdown"
     end
   end
 
@@ -38,7 +38,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     get stories_url(filter: { q: "ログインできる", current_state: "accepted" })
 
     assert_response :success
-    assert_select "table tbody tr", 1
+    assert_select ".story-card", 1
     assert_select "a", text: "ID/PWでログインできる"
   end
 
@@ -46,7 +46,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     get stories_url(filter: { labels: ["backend"], owners: ["Edward"] })
 
     assert_response :success
-    assert_select "table tbody tr", 1
+    assert_select ".story-card", 1
     assert_select "a", text: "データの展開を unzip で行うようにする"
   end
 
@@ -54,7 +54,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     get stories_url(filter: { created_from: "2017-01-01", created_to: "2018-01-01" })
 
     assert_response :success
-    assert_select "table tbody tr", 1
+    assert_select ".story-card", 1
     assert_select "a", text: "アプリケーションをメンテナンス中にできる"
   end
 

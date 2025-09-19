@@ -2,33 +2,33 @@
 <% standalone = local_assigns.fetch(:standalone, false) %>
 <% heading_tag = standalone ? :h1 : :h2 %>
 
-<div class="story-detail-panel">
+<div class="detail">
   <% if standalone %>
-    <nav class="mb-4">
-      <%= link_to t("stories.detail.back_link"), stories_path, class: "text-blue-600" %>
+    <nav class="detail__nav">
+      <%= link_to t("stories.detail.back_link"), stories_path, class: "button button--ghost" %>
     </nav>
   <% end %>
 
-  <header class="story-detail-header mb-4">
-    <%= content_tag heading_tag, story.title, class: "story-detail-title" %>
-    <div class="story-detail-meta">
-      <span class="story-badge story-badge--type"><%= story.story_type.presence || t("stories.detail.type_unknown") %></span>
-      <span class="story-badge story-badge--state"><%= story.current_state.presence || t("stories.detail.state_unknown") %></span>
-      <% if story.estimate %>
-        <span class="story-badge story-badge--estimate"><%= story.estimate %> pt</span>
-      <% end %>
+  <header class="detail__header">
+    <%= content_tag heading_tag, story.title, class: "detail__title" %>
+    <div class="badge-set">
+      <span class="badge badge--type"><%= story.story_type.presence || t("stories.detail.type_unknown") %></span>
+      <span class="badge badge--state"><%= story.current_state.presence || t("stories.detail.state_unknown") %></span>
       <% if story.priority.present? %>
-        <span class="story-badge story-badge--priority"><%= story.priority %></span>
+        <span class="badge badge--priority"><%= story.priority %></span>
+      <% end %>
+      <% if story.estimate.present? %>
+        <span class="badge badge--estimate"><%= t("stories.detail.points_badge", points: story.estimate) %></span>
       <% end %>
       <% if story.epic.present? %>
-        <span class="story-badge story-badge--epic"><%= story.epic.name %></span>
+        <span class="badge badge--epic"><%= story.epic.name %></span>
       <% end %>
     </div>
   </header>
 
-  <section class="story-detail-section">
+  <section class="detail-section">
     <h3><%= t("stories.detail.basic_info") %></h3>
-    <dl class="story-detail-grid">
+    <dl class="detail-grid">
       <div>
         <dt><%= t("stories.detail.requested_by") %></dt>
         <dd><%= story.requested_by.presence || t("common.not_available") %></dd>
@@ -54,121 +54,123 @@
     </dl>
   </section>
 
-  <section class="story-detail-section">
+  <section class="detail-section">
     <h3><%= t("stories.detail.description") %></h3>
     <% if story.description.present? %>
-      <div class="story-detail-markdown">
+      <div class="markdown">
         <%= render_markdown(story.description) %>
       </div>
     <% else %>
-      <p><%= t("stories.detail.no_description") %></p>
+      <p class="detail-empty"><%= t("stories.detail.no_description") %></p>
     <% end %>
   </section>
 
-  <section class="story-detail-section">
+  <section class="detail-section">
     <h3><%= t("stories.detail.owners") %></h3>
     <% if story.story_ownerships.any? %>
-      <ul>
+      <ul class="detail-list">
         <% story.story_ownerships.each do |ownership| %>
           <li><%= ownership.owner_name %></li>
         <% end %>
       </ul>
     <% else %>
-      <p><%= t("stories.detail.no_owner") %></p>
+      <p class="detail-empty"><%= t("stories.detail.no_owner") %></p>
     <% end %>
   </section>
 
-  <section class="story-detail-section">
+  <section class="detail-section">
     <h3><%= t("stories.detail.labels") %></h3>
     <% if story.story_labels.any? %>
-      <p class="story-detail-tags">
+      <ul class="tag-list">
         <% story.story_labels.each do |label| %>
-          <span><%= label.name %></span>
+          <li><%= label.name %></li>
         <% end %>
-      </p>
+      </ul>
     <% else %>
-      <p><%= t("stories.detail.no_label") %></p>
+      <p class="detail-empty"><%= t("stories.detail.no_label") %></p>
     <% end %>
   </section>
 
-  <section class="story-detail-section">
+  <section class="detail-section">
     <h3><%= t("stories.detail.tasks") %></h3>
     <% if story.story_tasks.any? %>
-      <ul>
+      <ul class="detail-list">
         <% story.story_tasks.each do |task| %>
           <li>
-            <strong><%= task.status.presence || t("stories.detail.status_unknown") %></strong>: <%= task.description %>
+            <strong><%= task.status.presence || t("stories.detail.status_unknown") %></strong>
+            <span><%= task.description %></span>
           </li>
         <% end %>
       </ul>
     <% else %>
-      <p><%= t("stories.detail.no_tasks") %></p>
+      <p class="detail-empty"><%= t("stories.detail.no_tasks") %></p>
     <% end %>
   </section>
 
-  <section class="story-detail-section">
+  <section class="detail-section">
     <h3><%= t("stories.detail.blockers") %></h3>
     <% if story.story_blockers.any? %>
-      <ul>
+      <ul class="detail-list">
         <% story.story_blockers.each do |blocker| %>
           <li>
-            <strong><%= blocker.status.presence || t("stories.detail.status_unknown") %></strong>: <%= blocker.description %>
+            <strong><%= blocker.status.presence || t("stories.detail.status_unknown") %></strong>
+            <span><%= blocker.description %></span>
           </li>
         <% end %>
       </ul>
     <% else %>
-      <p><%= t("stories.detail.no_blockers") %></p>
+      <p class="detail-empty"><%= t("stories.detail.no_blockers") %></p>
     <% end %>
   </section>
 
-  <section class="story-detail-section">
+  <section class="detail-section">
     <h3><%= t("stories.detail.pull_requests") %></h3>
     <% if story.story_pull_requests.any? %>
-      <ul>
+      <ul class="detail-list">
         <% story.story_pull_requests.each do |pr| %>
           <li><%= link_to pr.url, pr.url, target: "_blank", rel: "noopener" %></li>
         <% end %>
       </ul>
     <% else %>
-      <p><%= t("stories.detail.no_pull_requests") %></p>
+      <p class="detail-empty"><%= t("stories.detail.no_pull_requests") %></p>
     <% end %>
   </section>
 
-  <section class="story-detail-section">
+  <section class="detail-section">
     <h3><%= t("stories.detail.branches") %></h3>
     <% if story.story_branches.any? %>
-      <ul>
+      <ul class="detail-list">
         <% story.story_branches.each do |branch| %>
           <li><%= branch.name %></li>
         <% end %>
       </ul>
     <% else %>
-      <p><%= t("stories.detail.no_branches") %></p>
+      <p class="detail-empty"><%= t("stories.detail.no_branches") %></p>
     <% end %>
   </section>
 
-  <section class="story-detail-section">
+  <section class="detail-section">
     <h3><%= t("stories.detail.comments") %></h3>
     <% if story.story_comments.any? %>
-      <ul class="story-detail-comments">
+      <ul class="comment-list">
         <% story.story_comments.each do |comment| %>
           <li>
-            <div class="story-detail-comment-meta">
+            <div class="comment-meta">
               <strong><%= comment.author_name.presence || t("stories.detail.comments_no_author") %></strong>
               <span><%= comment.commented_at&.to_date || t("stories.detail.comments_no_date") %></span>
             </div>
             <% if comment.body.present? %>
-              <div class="story-detail-markdown">
+              <div class="markdown">
                 <%= render_markdown(comment.body) %>
               </div>
             <% else %>
-              <p><%= t("stories.detail.comments_empty_body") %></p>
+              <p class="detail-empty"><%= t("stories.detail.comments_empty_body") %></p>
             <% end %>
           </li>
         <% end %>
       </ul>
     <% else %>
-      <p><%= t("stories.detail.no_comments") %></p>
+      <p class="detail-empty"><%= t("stories.detail.no_comments") %></p>
     <% end %>
   </section>
 </div>

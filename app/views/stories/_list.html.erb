@@ -1,38 +1,61 @@
 <% filter_params = local_assigns.fetch(:filter_params, {}) %>
 
-<table class="table-auto w-full border-collapse mt-4">
-  <thead>
-    <tr class="text-left border-b">
-      <th class="py-2 pr-4"><%= t("stories.list.title") %></th>
-      <th class="py-2 pr-4"><%= t("stories.list.type") %></th>
-      <th class="py-2 pr-4"><%= t("stories.list.state") %></th>
-      <th class="py-2 pr-4"><%= t("stories.list.points") %></th>
-      <th class="py-2 pr-4"><%= t("stories.list.epic") %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% stories.each do |story| %>
-      <tr class="border-b">
-        <td class="py-2 pr-4"><%= link_to story.title, story_path(story), data: { turbo_frame: "story_detail" } %></td>
-        <td class="py-2 pr-4"><%= story.story_type.presence || t("common.not_available") %></td>
-        <td class="py-2 pr-4"><%= story.current_state.presence || t("common.not_available") %></td>
-        <td class="py-2 pr-4"><%= story.estimate.presence || t("common.not_available") %></td>
-        <td class="py-2 pr-4"><%= story.epic&.name || t("common.not_available") %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="story-cards">
+  <% stories.each do |story| %>
+    <article class="story-card">
+      <div class="story-card__body">
+        <h3 class="story-card__title">
+          <%= link_to story.title, story_path(story), data: { turbo_frame: "story_detail" } %>
+        </h3>
+        <div class="story-card__meta">
+          <span><%= story.story_type.presence || t("stories.detail.type_unknown") %></span>
+          <span><%= story.current_state.presence || t("stories.detail.state_unknown") %></span>
+          <% if story.priority.present? %>
+            <span><%= story.priority %></span>
+          <% end %>
+          <% if story.story_created_at.present? %>
+            <span><%= l(story.story_created_at.to_date, format: :long) %></span>
+          <% end %>
+        </div>
+        <% if story.story_labels.any? %>
+          <ul class="story-card__tags">
+            <% story.story_labels.first(6).each do |label| %>
+              <li><%= label.name %></li>
+            <% end %>
+            <% if story.story_labels.size > 6 %>
+              <li>…</li>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+      <div class="story-card__aside">
+        <% if story.epic.present? %>
+          <span class="story-card__badge story-card__badge--epic"><%= story.epic.name %></span>
+        <% end %>
+        <% if story.estimate.present? %>
+          <span class="story-card__badge"><%= t("stories.detail.points", points: story.estimate) %></span>
+        <% end %>
+        <% story.story_ownerships.first(3).each do |ownership| %>
+          <span class="story-card__badge story-card__badge--owner"><%= ownership.owner_name %></span>
+        <% end %>
+        <% if story.story_ownerships.size > 3 %>
+          <span class="story-card__badge story-card__badge--owner">…</span>
+        <% end %>
+      </div>
+    </article>
+  <% end %>
+</div>
 
 <% if stories.empty? %>
-  <p class="mt-4"><%= t("stories.list.empty") %></p>
+  <p class="story-list__empty"><%= t("stories.list.empty") %></p>
 <% elsif next_page %>
-  <div class="flex flex-col items-center gap-2 py-6">
-    <div class="text-sm text-gray-500"><%= t("stories.pagination.auto_load_hint") %></div>
+  <div class="story-list__pagination">
+    <div class="story-list__hint"><%= t("stories.pagination.auto_load_hint") %></div>
     <%= link_to t("stories.pagination.load_more"), stories_path(page: next_page, filter: filter_params),
-                class: "px-4 py-2 bg-gray-800 text-white rounded",
+                class: "button button--secondary",
                 data: { turbo_frame: "stories_list", "infinite-scroll-target": "link" } %>
-    <div class="text-sm text-gray-400" data-infinite-scroll-target="sentinel"><%= t("stories.pagination.loading") %></div>
+    <div class="story-list__loading" data-infinite-scroll-target="sentinel"><%= t("stories.pagination.loading") %></div>
   </div>
 <% else %>
-  <p class="py-6 text-center text-gray-500"><%= t("stories.pagination.all_loaded") %></p>
+  <p class="story-list__end"><%= t("stories.pagination.all_loaded") %></p>
 <% end %>
