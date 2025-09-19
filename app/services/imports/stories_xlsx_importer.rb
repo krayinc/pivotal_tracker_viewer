@@ -36,7 +36,7 @@ module Imports
     def call
       raise Error, "stories.xlsx not found at #{@file_path}" unless @file_path.exist?
 
-      spreadsheet = Roo::Spreadsheet.open(@file_path.to_s)
+      spreadsheet = open_spreadsheet!
       sheet = spreadsheet.sheet(0)
 
       ActiveRecord::Base.transaction do
@@ -49,11 +49,17 @@ module Imports
       end
     end
 
-    private
+  private
 
-    def default_file_path
-      Rails.root.join("stories.xlsx")
-    end
+  def default_file_path
+    Rails.root.join("stories.xlsx")
+  end
+
+  def open_spreadsheet!
+    Roo::Spreadsheet.open(@file_path.to_s)
+  rescue Zip::Error, Roo::Excelx::FileTypeError, ArgumentError => e
+    raise Error, "ファイルを読み込めませんでした: #{e.message}"
+  end
 
     def purge_existing_records
       StoryBranch.delete_all
