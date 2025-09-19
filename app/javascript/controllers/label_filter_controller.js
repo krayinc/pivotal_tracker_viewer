@@ -22,6 +22,12 @@ export default class extends Controller {
     this.submit()
   }
 
+  preventSubmit(event) {
+    if (event.key === "Enter") {
+      event.preventDefault()
+    }
+  }
+
   submit() {
     clearTimeout(this.timeout)
 

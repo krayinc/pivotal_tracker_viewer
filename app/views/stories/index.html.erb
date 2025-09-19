@@ -94,7 +94,7 @@
               <%= text_field_tag :label_search, nil,
                                  placeholder: t("stories.index.labels_search_placeholder"),
                                  class: "input input--compact",
-                                 data: { action: "input->label-filter#search", label_filter_target: "search" } %>
+                                 data: { action: "keydown->label-filter#preventSubmit input->label-filter#search", label_filter_target: "search" } %>
             </div>
             <div class="label-filter__content" data-label-filter-target="list">
               <% selected_labels = Array(@filter_params[:labels]) %>
