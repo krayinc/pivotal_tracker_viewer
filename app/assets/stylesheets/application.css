@@ -239,3 +239,111 @@
     padding-top: 1.5rem;
   }
 }
+
+.epics-layout {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+  margin-top: 1.5rem;
+}
+
+.epics-table-wrapper {
+  overflow-x: auto;
+}
+
+.epics-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.epics-table th,
+.epics-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.epics-table th {
+  background: #f3f4f6;
+  font-weight: 600;
+  color: #374151;
+}
+
+.epics-table tbody tr:nth-child(odd) {
+  background: #fafafa;
+}
+
+.epic-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.epic-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.metric {
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-bar {
+  position: relative;
+  background: #e5e7eb;
+  border-radius: 9999px;
+  height: 0.6rem;
+  overflow: hidden;
+}
+
+.progress-bar__fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #34d399 0%, #10b981 100%);
+}
+
+.progress-text {
+  font-size: 0.75rem;
+  color: #4b5563;
+}
+
+.epics-secondary {
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+}
+
+.epics-secondary h2 {
+  margin-top: 0;
+}
+
+.epics-secondary ol {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: #4b5563;
+  font-size: 0.9rem;
+}
+
+.epics-back-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #1d4ed8;
+  text-decoration: none;
+}
+
+.epics-back-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 960px) {
+  .epics-layout {
+    grid-template-columns: 1fr;
+  }
+}

@@ -11,5 +11,7 @@ Rails.application.routes.draw do
 
   resources :stories, only: %i[index show]
 
+  resources :epics, only: :index
+
   root "stories#index"
 end
