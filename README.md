@@ -1,6 +1,11 @@
 # Pivotal Tracker Viewer
 
-ローカルに保存された Pivotal Tracker エクスポートファイル（`stories.xlsx`）を解析し、検索・閲覧できる Rails 8 アプリケーションです。Turbo / Stimulus / Hotwire など Rails 8 標準スタックを活用したモダンなアーキテクチャで構築します。現時点では `rails new` 直後の状態から機能を実装していきます。
+ローカルに保存された Pivotal Tracker エクスポートファイル（`stories.xlsx`）を解析し、検索・閲覧できる Rails 8 アプリケーションです。Turbo / Stimulus / Hotwire など Rails 8 標準スタックを活用したモダンなアーキテクチャで構築しています。
+
+## 動作環境
+- Ruby 3.4.5
+- SQLite3（開発・テストは Rails 標準の SQLite を利用）
+- Node.js 等のフロントエンドツールは不要（Importmap + Turbo + Stimulus を利用）
 
 ## 目的
 - Pivotal Tracker から出力されたストーリー情報を正規化して内部 DB に保存し、ローカル環境で高速に検索・閲覧できるようにする。
@@ -46,7 +51,44 @@
 3. エピックビューや集計表示の追加、Markdown レンダリング・タグ UI を整備。
 4. 無限スクロールや通知などの UX 改善、システムテスト整備。
 
-## セットアップメモ
-- Rails 8 の標準的なセットアップ手順に従う（`bundle install`, `bin/rails db:setup` など）。
-- `stories.xlsx` をプロジェクト直下（または設定ディレクトリ）に配置してインポートを実行する。
-- 実装が進み次第、詳細な実行手順やコマンドを追記予定。
+## 開発環境セットアップ
+```sh
+bin/setup --skip-server
+```
+
+上記スクリプトで依存関係のインストールと `bin/rails db:prepare` が自動で実行されます。サーバーの自動起動を行う場合は `--skip-server` を省略してください。
+
+手動で行う場合は以下の手順です。
+
+```sh
+bundle install
+bin/rails db:prepare
+```
+
+## アプリの起動
+```sh
+bin/dev
+```
+
+サーバー起動後、`http://localhost:3000` にアクセスするとストーリー一覧画面が表示されます。初期状態ではストーリーが存在しないため、先に `stories.xlsx` をインポートしてください。
+
+## stories.xlsx の準備
+- Pivotal Tracker からエクスポートした `stories.xlsx` をプロジェクト直下に配置するか、インポート画面からアップロードします。
+- サンプルデータとして `test/fixtures/files/stories_sample.xlsx` が用意されています。動作確認用にコピーして利用できます。
+
+## 使い方
+1. ブラウザで `http://localhost:3000/import` にアクセスします。
+2. `stories.xlsx` を選択して「インポート実行」をクリックすると既存データを置き換えて取り込みます。
+3. インポート後はトップページ（ストーリー一覧）でフィルタ条件を指定して絞り込み、詳細ペインで Markdown 描画されたストーリー内容を確認できます。
+4. 「エピック」画面ではラベル単位の進捗サマリを確認でき、エピック名をクリックすると該当ストーリーに絞り込まれます。
+
+インポートに失敗した場合は、UI 上に考えられる原因とともに日本語のエラーメッセージが表示されます。ログには元の例外情報が記録されるため、詳細調査も可能です。
+
+## テスト
+```sh
+bin/rails test           # すべてのテスト
+bin/rails test test/controllers/imports_controller_test.rb
+bin/rails test test/system/stories_flows_test.rb
+```
+
+Excel インポートのエラー処理や Turbo Stream 通信など、主要なユースケースはコントローラ / システムテストでカバーしています。
