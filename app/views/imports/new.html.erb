@@ -24,3 +24,7 @@
   <p>すべてのストーリーおよび関連データを削除し、空の状態に戻します。</p>
   <%= button_to "全データを削除", import_path, method: :delete, data: { turbo_confirm: "本当に削除しますか？" }, class: "danger-button" %>
 </section>
+
+<div class="mt-4">
+  <%= link_to "ストーリー一覧に戻る", stories_path, class: "epics-back-link" %>
+</div>
