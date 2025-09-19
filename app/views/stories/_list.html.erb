@@ -11,7 +11,7 @@
   <tbody>
     <% stories.each do |story| %>
       <tr class="border-b">
-        <td class="py-2 pr-4"><%= link_to story.title, story_path(story) %></td>
+        <td class="py-2 pr-4"><%= link_to story.title, story_path(story), data: { turbo_frame: "story_detail" } %></td>
         <td class="py-2 pr-4"><%= story.story_type.presence || "-" %></td>
         <td class="py-2 pr-4"><%= story.current_state.presence || "-" %></td>
         <td class="py-2 pr-4"><%= story.estimate.presence || "-" %></td>

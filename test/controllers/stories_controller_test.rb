@@ -17,6 +17,9 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       assert_select "table tbody tr", minimum: 1
     end
     assert_select "a", text: "ID/PWでログインできる"
+    assert_select "turbo-frame#story_detail" do
+      assert_select "p", /ストーリーを選択/
+    end
   end
 
   test "show displays story details" do
@@ -24,8 +27,10 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
 
     get story_url(story)
     assert_response :success
-    assert_select "h1", story.title
-    assert_select "section", text: /コメント/
+    assert_select "turbo-frame#story_detail" do
+      assert_select "h1", story.title
+      assert_select "div.story-detail-markdown"
+    end
   end
 
   test "infinite scroll fetches next page via turbo frame" do
@@ -44,6 +49,16 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     get stories_url(page: 2), headers: { "Turbo-Frame" => "stories_list" }
     assert_response :success
     assert_includes response.body, "追加ストーリー#{per_page}"
+  end
+
+  test "show responds with detail frame for turbo requests" do
+    story = Story.find_by!(tracker_id: 61531244)
+
+    get story_url(story), headers: { "Turbo-Frame" => "story_detail" }
+    assert_response :success
+    assert_includes response.body, '<turbo-frame id="story_detail"'
+    assert_includes response.body, story.title
+    refute_includes response.body, "<html"
   end
 
   test "root redirects to stories index" do

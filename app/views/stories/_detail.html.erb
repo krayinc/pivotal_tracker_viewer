@@ -1,0 +1,167 @@
+<% story = local_assigns.fetch(:story) %>
+<% standalone = local_assigns.fetch(:standalone, false) %>
+<% heading_tag = standalone ? :h1 : :h2 %>
+
+<div class="story-detail-panel">
+  <% if standalone %>
+    <nav class="mb-4">
+      <%= link_to "← 一覧に戻る", stories_path, class: "text-blue-600" %>
+    </nav>
+  <% end %>
+
+  <header class="story-detail-header mb-4">
+    <%= content_tag heading_tag, story.title, class: "story-detail-title" %>
+    <div class="story-detail-meta">
+      <span>タイプ: <strong><%= story.story_type.presence || "-" %></strong></span>
+      <span>状態: <strong><%= story.current_state.presence || "-" %></strong></span>
+      <span>ポイント: <strong><%= story.estimate.presence || "-" %></strong></span>
+      <span>エピック: <strong><%= story.epic&.name || "-" %></strong></span>
+    </div>
+  </header>
+
+  <section class="story-detail-section">
+    <h3>基本情報</h3>
+    <dl class="story-detail-grid">
+      <div>
+        <dt>リクエスター</dt>
+        <dd><%= story.requested_by.presence || "-" %></dd>
+      </div>
+      <div>
+        <dt>作成日</dt>
+        <dd><%= story.story_created_at&.to_date || "-" %></dd>
+      </div>
+      <div>
+        <dt>受け入れ日</dt>
+        <dd><%= story.accepted_at&.to_date || "-" %></dd>
+      </div>
+      <div>
+        <dt>URL</dt>
+        <dd>
+          <% if story.url.present? %>
+            <%= link_to story.url, story.url, target: "_blank", rel: "noopener" %>
+          <% else %>
+            -
+          <% end %>
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="story-detail-section">
+    <h3>説明</h3>
+    <% if story.description.present? %>
+      <div class="story-detail-markdown">
+        <%= render_markdown(story.description) %>
+      </div>
+    <% else %>
+      <p>説明がありません。</p>
+    <% end %>
+  </section>
+
+  <section class="story-detail-section">
+    <h3>担当者</h3>
+    <% if story.story_ownerships.any? %>
+      <ul>
+        <% story.story_ownerships.each do |ownership| %>
+          <li><%= ownership.owner_name %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>担当者は設定されていません。</p>
+    <% end %>
+  </section>
+
+  <section class="story-detail-section">
+    <h3>ラベル</h3>
+    <% if story.story_labels.any? %>
+      <p class="story-detail-tags">
+        <% story.story_labels.each do |label| %>
+          <span><%= label.name %></span>
+        <% end %>
+      </p>
+    <% else %>
+      <p>ラベルは設定されていません。</p>
+    <% end %>
+  </section>
+
+  <section class="story-detail-section">
+    <h3>タスク</h3>
+    <% if story.story_tasks.any? %>
+      <ul>
+        <% story.story_tasks.each do |task| %>
+          <li>
+            <strong><%= task.status.presence || "状態未設定" %></strong>: <%= task.description %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>タスクは登録されていません。</p>
+    <% end %>
+  </section>
+
+  <section class="story-detail-section">
+    <h3>ブロッカー</h3>
+    <% if story.story_blockers.any? %>
+      <ul>
+        <% story.story_blockers.each do |blocker| %>
+          <li>
+            <strong><%= blocker.status.presence || "状態未設定" %></strong>: <%= blocker.description %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>ブロッカーは登録されていません。</p>
+    <% end %>
+  </section>
+
+  <section class="story-detail-section">
+    <h3>Pull Request</h3>
+    <% if story.story_pull_requests.any? %>
+      <ul>
+        <% story.story_pull_requests.each do |pr| %>
+          <li><%= link_to pr.url, pr.url, target: "_blank", rel: "noopener" %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>関連する Pull Request はありません。</p>
+    <% end %>
+  </section>
+
+  <section class="story-detail-section">
+    <h3>Git ブランチ</h3>
+    <% if story.story_branches.any? %>
+      <ul>
+        <% story.story_branches.each do |branch| %>
+          <li><%= branch.name %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>関連するブランチはありません。</p>
+    <% end %>
+  </section>
+
+  <section class="story-detail-section">
+    <h3>コメント</h3>
+    <% if story.story_comments.any? %>
+      <ul class="story-detail-comments">
+        <% story.story_comments.each do |comment| %>
+          <li>
+            <div class="story-detail-comment-meta">
+              <strong><%= comment.author_name.presence || "無署名" %></strong>
+              <span><%= comment.commented_at&.to_date || "日時未設定" %></span>
+            </div>
+            <% if comment.body.present? %>
+              <div class="story-detail-markdown">
+                <%= render_markdown(comment.body) %>
+              </div>
+            <% else %>
+              <p>本文が空です。</p>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>コメントはありません。</p>
+    <% end %>
+  </section>
+</div>

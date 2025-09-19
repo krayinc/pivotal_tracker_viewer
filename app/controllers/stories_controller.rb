@@ -28,5 +28,9 @@ class StoriesController < ApplicationController
         :story_comments
       )
       .find(params[:id])
+
+    if turbo_frame_request?
+      render partial: "stories/detail_frame", locals: { story: @story, standalone: false }, layout: false
+    end
   end
 end
