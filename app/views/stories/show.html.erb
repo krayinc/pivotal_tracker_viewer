@@ -1,0 +1,157 @@
+<h1 class="mb-4"><%= @story.title %></h1>
+
+<nav class="mb-4">
+  <%= link_to "← 一覧に戻る", stories_path, class: "text-blue-600" %>
+</nav>
+
+<section class="mb-6">
+  <h2 class="font-semibold mb-2">基本情報</h2>
+  <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
+    <div>
+      <dt class="text-sm text-gray-600">タイプ</dt>
+      <dd class="text-lg"><%= @story.story_type.presence || "-" %></dd>
+    </div>
+    <div>
+      <dt class="text-sm text-gray-600">状態</dt>
+      <dd class="text-lg"><%= @story.current_state.presence || "-" %></dd>
+    </div>
+    <div>
+      <dt class="text-sm text-gray-600">ポイント</dt>
+      <dd class="text-lg"><%= @story.estimate.presence || "-" %></dd>
+    </div>
+    <div>
+      <dt class="text-sm text-gray-600">リクエスター</dt>
+      <dd class="text-lg"><%= @story.requested_by.presence || "-" %></dd>
+    </div>
+    <div>
+      <dt class="text-sm text-gray-600">作成日</dt>
+      <dd class="text-lg"><%= @story.story_created_at&.to_date || "-" %></dd>
+    </div>
+    <div>
+      <dt class="text-sm text-gray-600">受け入れ日</dt>
+      <dd class="text-lg"><%= @story.accepted_at&.to_date || "-" %></dd>
+    </div>
+    <div>
+      <dt class="text-sm text-gray-600">エピック</dt>
+      <dd class="text-lg"><%= @story.epic&.name || "-" %></dd>
+    </div>
+    <div>
+      <dt class="text-sm text-gray-600">URL</dt>
+      <dd class="text-lg">
+        <% if @story.url.present? %>
+          <%= link_to @story.url, @story.url, target: "_blank", rel: "noopener" %>
+        <% else %>
+          -
+        <% end %>
+      </dd>
+    </div>
+  </dl>
+</section>
+
+<section class="mb-6">
+  <h2 class="font-semibold mb-2">説明</h2>
+  <div class="whitespace-pre-wrap bg-gray-50 p-3 rounded border border-gray-200">
+    <%= @story.description.presence || "説明がありません" %>
+  </div>
+</section>
+
+<section class="mb-6">
+  <h2 class="font-semibold mb-2">担当者</h2>
+  <% if @story.story_ownerships.any? %>
+    <ul class="list-disc pl-6">
+      <% @story.story_ownerships.each do |ownership| %>
+        <li><%= ownership.owner_name %></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>担当者は設定されていません。</p>
+  <% end %>
+</section>
+
+<section class="mb-6">
+  <h2 class="font-semibold mb-2">ラベル</h2>
+  <% if @story.story_labels.any? %>
+    <p>
+      <% @story.story_labels.each do |label| %>
+        <span class="inline-block bg-blue-100 text-blue-800 text-sm px-2 py-1 mr-2 mb-2 rounded"><%= label.name %></span>
+      <% end %>
+    </p>
+  <% else %>
+    <p>ラベルは設定されていません。</p>
+  <% end %>
+</section>
+
+<section class="mb-6">
+  <h2 class="font-semibold mb-2">タスク</h2>
+  <% if @story.story_tasks.any? %>
+    <ul class="list-disc pl-6">
+      <% @story.story_tasks.each do |task| %>
+        <li>
+          <strong><%= task.status.presence || "状態未設定" %></strong>: <%= task.description %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>タスクは登録されていません。</p>
+  <% end %>
+</section>
+
+<section class="mb-6">
+  <h2 class="font-semibold mb-2">ブロッカー</h2>
+  <% if @story.story_blockers.any? %>
+    <ul class="list-disc pl-6">
+      <% @story.story_blockers.each do |blocker| %>
+        <li>
+          <strong><%= blocker.status.presence || "状態未設定" %></strong>: <%= blocker.description %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>ブロッカーは登録されていません。</p>
+  <% end %>
+</section>
+
+<section class="mb-6">
+  <h2 class="font-semibold mb-2">Pull Request</h2>
+  <% if @story.story_pull_requests.any? %>
+    <ul class="list-disc pl-6">
+      <% @story.story_pull_requests.each do |pr| %>
+        <li><%= link_to pr.url, pr.url, target: "_blank", rel: "noopener" %></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>関連する Pull Request はありません。</p>
+  <% end %>
+</section>
+
+<section class="mb-6">
+  <h2 class="font-semibold mb-2">Git ブランチ</h2>
+  <% if @story.story_branches.any? %>
+    <ul class="list-disc pl-6">
+      <% @story.story_branches.each do |branch| %>
+        <li><%= branch.name %></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>関連するブランチはありません。</p>
+  <% end %>
+</section>
+
+<section class="mb-6">
+  <h2 class="font-semibold mb-2">コメント</h2>
+  <% if @story.story_comments.any? %>
+    <ul class="space-y-4">
+      <% @story.story_comments.each do |comment| %>
+        <li class="border border-gray-200 rounded p-3">
+          <div class="text-sm text-gray-600 mb-1">
+            <strong><%= comment.author_name.presence || "無署名" %></strong>
+            (<%= comment.commented_at&.to_date || "日時未設定" %>)
+          </div>
+          <div class="whitespace-pre-wrap"><%= comment.body %></div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>コメントはありません。</p>
+  <% end %>
+</section>
