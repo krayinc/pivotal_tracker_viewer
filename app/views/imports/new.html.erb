@@ -8,7 +8,7 @@
   <h2>stories.xlsx をアップロード</h2>
   <p>既存データは新しいファイルで置き換えられます。Pivotal Tracker からエクスポートした stories.xlsx を選択してください。</p>
 
-  <%= form_with url: import_path, method: :post, multipart: true, data: { turbo_stream: true }, class: "upload-form" do |f| %>
+  <%= form_with url: import_path, method: :post, multipart: true, local: true, class: "upload-form" do |f| %>
     <div class="upload-field">
       <%= f.label :file, "インポートファイル" %>
       <%= f.file_field :file, accept: ".xlsx" %>
