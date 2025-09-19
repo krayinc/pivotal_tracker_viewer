@@ -6,7 +6,7 @@ class ImportsController < ApplicationController
   end
 
   def create
-    uploaded_file = params.dig(:import, :file)
+    uploaded_file = params.require(:import).permit(:file)[:file]
 
     if uploaded_file.blank?
       assign_flash(:alert, "インポートするファイルを選択してください。")
