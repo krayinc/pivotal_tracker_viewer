@@ -12,14 +12,14 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   test "index loads and lists stories" do
     get stories_url
     assert_response :success
-    assert_select "h1", "ストーリー一覧"
+    assert_select "h1", I18n.t("stories.index.title")
     assert_select "form.stories-filter"
     assert_select "turbo-frame#stories_list" do
       assert_select "table tbody tr", minimum: 1
     end
     assert_select "a", text: "ID/PWでログインできる"
     assert_select "turbo-frame#story_detail" do
-      assert_select "p", /ストーリーを選択/
+      assert_select "p", I18n.t("stories.index.placeholder_detail")
     end
   end
 
@@ -110,6 +110,6 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   test "root redirects to stories index" do
     get root_url
     assert_response :success
-    assert_select "h1", "ストーリー一覧"
+    assert_select "h1", I18n.t("stories.index.title")
   end
 end

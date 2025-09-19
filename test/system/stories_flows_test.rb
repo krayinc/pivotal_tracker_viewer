@@ -49,7 +49,7 @@ class StoriesFlowsTest < ApplicationSystemTestCase
       assert_text "3"
     end
 
-    click_link "ストーリー一覧に戻る"
+    click_link I18n.t("common.back_to_stories")
     assert_current_path stories_path
     assert_selector "table tbody tr", minimum: 1
   end

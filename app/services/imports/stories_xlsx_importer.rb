@@ -4,7 +4,14 @@ require "pathname"
 
 module Imports
   class StoriesXlsxImporter
-    Error = Class.new(StandardError)
+    class Error < StandardError
+      attr_reader :user_message
+
+      def initialize(message = nil, user_message: nil)
+        super(message)
+        @user_message = user_message || message
+      end
+    end
     Result = Struct.new(:epics_count, :stories_count, keyword_init: true)
 
     ID_COL = 0
@@ -34,7 +41,12 @@ module Imports
     end
 
     def call
-      raise Error, "stories.xlsx not found at #{@file_path}" unless @file_path.exist?
+      unless @file_path.exist?
+        raise Error.new(
+          "stories.xlsx not found at #{@file_path}",
+          user_message: I18n.t("imports.errors.file_not_found")
+        )
+      end
 
       spreadsheet = open_spreadsheet!
       sheet = spreadsheet.sheet(0)
@@ -58,7 +70,10 @@ module Imports
   def open_spreadsheet!
     Roo::Spreadsheet.open(@file_path.to_s)
   rescue Zip::Error, Roo::Excelx::FileTypeError, ArgumentError => e
-    raise Error, "ファイルを読み込めませんでした: #{e.message}"
+    raise Error.new(
+      "Failed to open spreadsheet: #{e.message}",
+      user_message: I18n.t("imports.errors.open_failed")
+    )
   end
 
     def purge_existing_records

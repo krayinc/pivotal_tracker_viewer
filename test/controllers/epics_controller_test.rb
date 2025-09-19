@@ -13,7 +13,7 @@ class EpicsControllerTest < ActionDispatch::IntegrationTest
     get epics_url
     assert_response :success
 
-    assert_select "h1", "エピック一覧"
+    assert_select "h1", I18n.t("epics.index.title")
     assert_select ".epics-summary .summary-card", 3
     assert_select "table.epics-table tbody tr", Epic.count
   end

@@ -1,15 +1,17 @@
-<h1 class="mb-4">エピック一覧</h1>
+<% provide(:title, t("epics.index.title")) %>
 
-<p>エピックごとのストーリー数、受け入れ済み割合、ポイント合計を集計しています。エピックを選択するとストーリー一覧に絞り込みが適用されます。</p>
+<h1 class="mb-4"><%= t("epics.index.title") %></h1>
+
+<p><%= t("epics.index.description") %></p>
 
 <section class="epics-summary">
   <div class="summary-card">
-    <h2>総ストーリー数</h2>
+    <h2><%= t("epics.index.summary_total_stories") %></h2>
     <p class="summary-value"><%= number_with_delimiter(@summary[:stories]) %></p>
-    <p class="summary-sub">受け入れ済み <%= @summary[:accepted] %> 件</p>
+    <p class="summary-sub"><%= t("epics.index.summary_accepted", count: @summary[:accepted]) %></p>
   </div>
   <div class="summary-card">
-    <h2>受け入れ進捗</h2>
+    <h2><%= t("epics.index.summary_progress") %></h2>
     <div class="summary-progress">
       <div class="summary-progress__bar">
         <div class="summary-progress__fill" style="width: <%= epic_summary_progress(@summary) %>%"></div>
@@ -18,9 +20,9 @@
     </div>
   </div>
   <div class="summary-card">
-    <h2>ポイント合計</h2>
+    <h2><%= t("epics.index.summary_points") %></h2>
     <p class="summary-value"><%= @summary[:total_points] %> pt</p>
-    <p class="summary-sub">Accepted: <%= @summary[:accepted_points] %> pt</p>
+    <p class="summary-sub"><%= t("epics.index.summary_points_detail", points: @summary[:accepted_points]) %></p>
   </div>
 </section>
 
@@ -29,11 +31,11 @@
     <table class="epics-table">
       <thead>
         <tr>
-          <th>エピック</th>
-          <th>ストーリー数</th>
-          <th>受け入れ済み</th>
-          <th>進捗</th>
-          <th>ポイント</th>
+          <th><%= t("epics.index.table_epic") %></th>
+          <th><%= t("epics.index.table_stories") %></th>
+          <th><%= t("epics.index.table_accepted") %></th>
+          <th><%= t("epics.index.table_progress") %></th>
+          <th><%= t("epics.index.table_points") %></th>
         </tr>
       </thead>
       <tbody>
@@ -56,8 +58,8 @@
               <span class="progress-text"><%= epic_progress_text(epic) %></span>
             </td>
             <td class="metric">
-              <div><strong>Total:</strong> <%= epic.total_points || 0 %> pt</div>
-              <div class="text-muted">Accepted: <%= epic.accepted_points || 0 %> pt</div>
+              <div><strong><%= t("epics.index.points_total", points: epic.total_points || 0) %></strong></div>
+              <div class="text-muted"><%= t("epics.index.points_accepted", points: epic.accepted_points || 0) %></div>
             </td>
           </tr>
         <% end %>
@@ -66,13 +68,13 @@
   </div>
 
   <aside class="epics-secondary">
-    <h2>使い方</h2>
+    <h2><%= t("epics.index.how_to") %></h2>
     <ol>
-      <li>エピック名をクリックすると、そのラベルを持つストーリーに一覧が切り替わります。</li>
-      <li>進捗バーは受け入れ済みストーリー数の割合を示します。</li>
-      <li>ポイントはストーリーの estimate 合計です（未設定は 0 pt として集計）。</li>
+      <li><%= t("epics.index.how_to_1") %></li>
+      <li><%= t("epics.index.how_to_2") %></li>
+      <li><%= t("epics.index.how_to_3") %></li>
     </ol>
 
-    <%= link_to "ストーリー一覧に戻る", stories_path, class: "epics-back-link" %>
+    <%= link_to t("common.back_to_stories"), stories_path, class: "epics-back-link" %>
   </aside>
 </section>

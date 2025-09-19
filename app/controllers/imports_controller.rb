@@ -9,25 +9,29 @@ class ImportsController < ApplicationController
     uploaded_file = params.require(:import).permit(:file)[:file]
 
     if uploaded_file.blank?
-      assign_flash(:alert, "インポートするファイルを選択してください。")
+      assign_flash(:alert, t("imports.flash.missing_file"))
       return respond_with_summary(status: :unprocessable_content)
     end
 
     save_uploaded_file!(uploaded_file)
     result = Imports::StoriesXlsxImporter.new(import_file_path).call
 
-    assign_flash(:notice, "インポートが完了しました (エピック #{result.epics_count} 件 / ストーリー #{result.stories_count} 件)")
+    assign_flash(:notice, t("imports.flash.success", epics: result.epics_count, stories: result.stories_count))
     respond_with_summary
+  rescue Imports::StoriesXlsxImporter::Error => e
+    Rails.logger.warn("Import failed (handled): #{e.class} - #{e.message}\n#{Array(e.backtrace).take(10).join("\n")}")
+    assign_flash(:alert, e.user_message || t("imports.flash.import_error"))
+    respond_with_summary(status: :unprocessable_content)
   rescue StandardError => e
     Rails.logger.error("Import failed: #{e.class} - #{e.message}\n#{e.backtrace.take(10).join("\n")}")
-    assign_flash(:alert, "インポートに失敗しました: #{e.message}")
+    assign_flash(:alert, t("imports.flash.unexpected_error"))
     respond_with_summary(status: :internal_server_error)
   end
 
   def destroy
     delete_all_records!
     FileUtils.rm_f(import_file_path)
-    assign_flash(:notice, "ストーリーと関連データを削除しました。")
+    assign_flash(:notice, t("imports.flash.destroy_success"))
     respond_with_summary
   end
 

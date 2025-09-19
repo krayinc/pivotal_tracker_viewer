@@ -1,40 +1,42 @@
-<h1 class="mb-4">ストーリー一覧</h1>
+<% provide(:title, t("stories.index.title")) %>
 
-<p>最新のインポート順に 50 件ずつ表示します。条件を指定すると一覧を絞り込めます。</p>
+<h1 class="mb-4"><%= t("stories.index.title") %></h1>
+
+<p><%= t("stories.index.description") %></p>
 
 <%= form_with url: stories_path, method: :get, scope: :filter, local: true, class: "stories-filter" do |f| %>
   <div class="stories-filter-grid">
     <div class="stories-filter-field">
-      <%= f.label :q, "キーワード" %>
-      <%= f.search_field :q, value: @filter_params[:q], placeholder: "タイトル、説明を検索", class: "stories-filter-input" %>
+      <%= f.label :q, t("stories.index.keyword_label") %>
+      <%= f.search_field :q, value: @filter_params[:q], placeholder: t("stories.index.keyword_placeholder"), class: "stories-filter-input" %>
     </div>
 
     <div class="stories-filter-field">
-      <%= f.label :story_type, "タイプ" %>
+      <%= f.label :story_type, t("stories.index.story_type_label") %>
       <%= f.select :story_type,
                    options_for_select(@available_story_types, @filter_params[:story_type]),
-                   { include_blank: "指定なし" },
+                   { include_blank: t("stories.index.no_selection") },
                    class: "stories-filter-input" %>
     </div>
 
     <div class="stories-filter-field">
-      <%= f.label :current_state, "状態" %>
+      <%= f.label :current_state, t("stories.index.state_label") %>
       <%= f.select :current_state,
                    options_for_select(@available_states, @filter_params[:current_state]),
-                   { include_blank: "指定なし" },
+                   { include_blank: t("stories.index.no_selection") },
                    class: "stories-filter-input" %>
     </div>
 
     <div class="stories-filter-field">
-      <%= f.label :priority, "優先度" %>
+      <%= f.label :priority, t("stories.index.priority_label") %>
       <%= f.select :priority,
                    options_for_select(@available_priorities, @filter_params[:priority]),
-                   { include_blank: "指定なし" },
+                   { include_blank: t("stories.index.no_selection") },
                    class: "stories-filter-input" %>
     </div>
 
     <div class="stories-filter-field">
-      <%= f.label :labels, "ラベル" %>
+      <%= f.label :labels, t("stories.index.labels_label") %>
       <%= f.select :labels,
                    options_for_select(@available_labels, @filter_params[:labels]),
                    {},
@@ -44,7 +46,7 @@
     </div>
 
     <div class="stories-filter-field">
-      <%= f.label :owners, "担当者" %>
+      <%= f.label :owners, t("stories.index.owners_label") %>
       <%= f.select :owners,
                    options_for_select(@available_owners, @filter_params[:owners]),
                    {},
@@ -54,29 +56,29 @@
     </div>
 
     <div class="stories-filter-field">
-      <%= f.label :created_from, "作成日 (From)" %>
+      <%= f.label :created_from, t("stories.index.created_from_label") %>
       <%= f.date_field :created_from, value: @filter_params[:created_from], class: "stories-filter-input" %>
     </div>
 
     <div class="stories-filter-field">
-      <%= f.label :created_to, "作成日 (To)" %>
+      <%= f.label :created_to, t("stories.index.created_to_label") %>
       <%= f.date_field :created_to, value: @filter_params[:created_to], class: "stories-filter-input" %>
     </div>
 
     <div class="stories-filter-field">
-      <%= f.label :accepted_from, "受け入れ日 (From)" %>
+      <%= f.label :accepted_from, t("stories.index.accepted_from_label") %>
       <%= f.date_field :accepted_from, value: @filter_params[:accepted_from], class: "stories-filter-input" %>
     </div>
 
     <div class="stories-filter-field">
-      <%= f.label :accepted_to, "受け入れ日 (To)" %>
+      <%= f.label :accepted_to, t("stories.index.accepted_to_label") %>
       <%= f.date_field :accepted_to, value: @filter_params[:accepted_to], class: "stories-filter-input" %>
     </div>
   </div>
 
   <div class="stories-filter-actions">
-    <%= f.submit "絞り込む", class: "stories-filter-submit" %>
-    <%= link_to "条件をクリア", stories_path, class: "stories-filter-reset" %>
+    <%= f.submit t("stories.index.submit"), class: "stories-filter-submit" %>
+    <%= link_to t("stories.index.reset"), stories_path, class: "stories-filter-reset" %>
   </div>
 <% end %>
 
@@ -91,7 +93,7 @@
   <aside class="stories-detail">
     <%= turbo_frame_tag "story_detail" do %>
       <p class="story-detail-placeholder">
-        一覧からストーリーを選択すると、ここに詳細が表示されます。
+        <%= t("stories.index.placeholder_detail") %>
       </p>
     <% end %>
   </aside>

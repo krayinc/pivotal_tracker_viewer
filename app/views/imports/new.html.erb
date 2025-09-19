@@ -1,30 +1,33 @@
-<h1 class="mb-4">データインポート</h1>
+<h1 class="mb-4"><%= t("imports.new.title") %></h1>
 
 <%= turbo_frame_tag "import_summary" do %>
   <%= render "summary", summary: @summary %>
 <% end %>
 
 <section class="import-form">
-  <h2>stories.xlsx をアップロード</h2>
-  <p>既存データは新しいファイルで置き換えられます。Pivotal Tracker からエクスポートした stories.xlsx を選択してください。</p>
+  <h2><%= t("imports.new.upload_heading") %></h2>
+  <p><%= t("imports.new.upload_description") %></p>
 
   <%= form_with scope: :import, url: import_path, method: :post, multipart: true, data: { turbo_stream: true }, class: "upload-form" do |f| %>
     <div class="upload-field">
-      <%= f.label :file, "インポートファイル" %>
+      <%= f.label :file, t("imports.new.file_label") %>
       <%= f.file_field :file, accept: ".xlsx" %>
     </div>
     <div class="upload-actions">
-      <%= f.submit "インポート実行", class: "stories-filter-submit" %>
+      <%= f.submit t("imports.new.submit"), class: "stories-filter-submit" %>
     </div>
   <% end %>
 </section>
 
 <section class="import-danger">
-  <h2>データ削除</h2>
-  <p>すべてのストーリーおよび関連データを削除し、空の状態に戻します。</p>
-  <%= button_to "全データを削除", import_path, method: :delete, data: { turbo_confirm: "本当に削除しますか？" }, class: "danger-button" %>
+  <h2><%= t("imports.new.danger_heading") %></h2>
+  <p><%= t("imports.new.danger_description") %></p>
+  <%= button_to t("imports.new.destroy_button"), import_path,
+                method: :delete,
+                data: { turbo_confirm: t("imports.confirm.destroy") },
+                class: "danger-button" %>
 </section>
 
 <div class="mt-4">
-  <%= link_to "ストーリー一覧に戻る", stories_path, class: "epics-back-link" %>
+  <%= link_to t("common.back_to_stories"), stories_path, class: "epics-back-link" %>
 </div>
