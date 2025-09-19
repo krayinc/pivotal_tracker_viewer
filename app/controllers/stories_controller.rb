@@ -16,7 +16,7 @@ class StoriesController < ApplicationController
     prepare_filter_options
 
     if turbo_frame_request?
-      render partial: "stories/list", locals: { stories: @stories, next_page: @next_page, filter_params: @filter_params }, layout: false
+      render partial: "stories/list_frame", locals: { stories: @stories, next_page: @next_page, filter_params: @filter_params }, layout: false
     end
   end
 

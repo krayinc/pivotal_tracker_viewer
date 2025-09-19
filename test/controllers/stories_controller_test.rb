@@ -74,6 +74,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     get stories_url(page: 2), headers: { "Turbo-Frame" => "stories_list" }
     assert_response :success
     assert_includes response.body, "追加ストーリー#{per_page}"
+    assert_select "turbo-frame#stories_list"
   end
 
   test "filtered pagination keeps query params" do
