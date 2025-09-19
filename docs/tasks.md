@@ -8,7 +8,7 @@ Rails 8 ベースの Pivotal Tracker Viewer を完成させるためのタスク
 - [x] Rubocop / standardrb 等のコード整形ツール導入の要否判断（既存の `rubocop-rails-omakase` 継続利用、追加導入なし）
 
 ## フェーズ 1: データモデル & インポート基盤
-- [ ] DB マイグレーション作成 (`Story`, `StoryOwnership`, `StoryLabel`, `StoryComment`, `StoryTask`, `StoryBlocker`, `StoryPullRequest`, `StoryBranch`, `Epic` など)
+- [x] DB マイグレーション作成 (`Story`, `StoryOwnership`, `StoryLabel`, `StoryComment`, `StoryTask`, `StoryBlocker`, `StoryPullRequest`, `StoryBranch`, `Epic` など)
 - [ ] モデル実装と関連付け、バリデーション整備
 - [ ] `Imports::StoriesXlsxImporter` サービス実装（Excel 解析 → 正規化 → トランザクション保存）
 - [ ] インポート用テストデータ整備（小規模サンプル Excel の作成 or fixture 生成）
