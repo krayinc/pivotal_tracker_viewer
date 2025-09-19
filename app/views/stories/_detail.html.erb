@@ -12,10 +12,17 @@
   <header class="story-detail-header mb-4">
     <%= content_tag heading_tag, story.title, class: "story-detail-title" %>
     <div class="story-detail-meta">
-      <span>タイプ: <strong><%= story.story_type.presence || "-" %></strong></span>
-      <span>状態: <strong><%= story.current_state.presence || "-" %></strong></span>
-      <span>ポイント: <strong><%= story.estimate.presence || "-" %></strong></span>
-      <span>エピック: <strong><%= story.epic&.name || "-" %></strong></span>
+      <span class="story-badge story-badge--type"><%= story.story_type.presence || "未設定" %></span>
+      <span class="story-badge story-badge--state"><%= story.current_state.presence || "状態不明" %></span>
+      <% if story.estimate %>
+        <span class="story-badge story-badge--estimate"><%= story.estimate %> pt</span>
+      <% end %>
+      <% if story.priority.present? %>
+        <span class="story-badge story-badge--priority"><%= story.priority %></span>
+      <% end %>
+      <% if story.epic.present? %>
+        <span class="story-badge story-badge--epic"><%= story.epic.name %></span>
+      <% end %>
     </div>
   </header>
 
