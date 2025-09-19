@@ -9,9 +9,9 @@ class StoriesController < ApplicationController
     base_scope = Story.ordered_by_import
     filtered_scope = StoriesQuery.new(base_scope, @filter_params).call
 
-    offset = (@page - 1) * PER_PAGE
-    @stories = filtered_scope.includes(:epic).offset(offset).limit(PER_PAGE)
-    @next_page = @page + 1 if filtered_scope.offset(offset + PER_PAGE).exists?
+    limit = @page * PER_PAGE
+    @stories = filtered_scope.includes(:epic).limit(limit)
+    @next_page = @page + 1 if filtered_scope.offset(limit).exists?
 
     prepare_filter_options
 

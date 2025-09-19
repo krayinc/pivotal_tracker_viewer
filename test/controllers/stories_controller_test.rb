@@ -75,6 +75,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, "追加ストーリー#{per_page}"
     assert_select "turbo-frame#stories_list"
+    assert_select "a", text: "ID/PWでログインできる"
   end
 
   test "filtered pagination keeps query params" do
