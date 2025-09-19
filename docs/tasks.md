@@ -11,7 +11,7 @@ Rails 8 ベースの Pivotal Tracker Viewer を完成させるためのタスク
 - [x] DB マイグレーション作成 (`Story`, `StoryOwnership`, `StoryLabel`, `StoryComment`, `StoryTask`, `StoryBlocker`, `StoryPullRequest`, `StoryBranch`, `Epic` など)
 - [x] モデル実装と関連付け、バリデーション整備
 - [x] `Imports::StoriesXlsxImporter` サービス実装（Excel 解析 → 正規化 → トランザクション保存）
-- [ ] インポート用テストデータ整備（小規模サンプル Excel の作成 or fixture 生成）
+- [x] インポート用テストデータ整備（小規模サンプル Excel の作成 or fixture 生成）
 - [ ] インポート処理のユニットテスト/統合テスト追加
 
 ## フェーズ 2: ストーリー閲覧機能（一覧＆詳細）
