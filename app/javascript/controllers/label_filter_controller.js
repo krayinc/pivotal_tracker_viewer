@@ -13,8 +13,8 @@ export default class extends Controller {
     const term = event.target.value.trim().toLowerCase()
 
     this.itemTargets.forEach(element => {
-      const name = element.dataset.name || ""
-      element.hidden = term && !name.includes(term)
+      const name = (element.dataset.name || element.textContent || "").toLowerCase()
+      element.hidden = term.length > 0 && !name.includes(term)
     })
   }
 
