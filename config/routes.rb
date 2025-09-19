@@ -13,5 +13,7 @@ Rails.application.routes.draw do
 
   resources :epics, only: :index
 
+  resource :import, only: %i[new create destroy]
+
   root "stories#index"
 end

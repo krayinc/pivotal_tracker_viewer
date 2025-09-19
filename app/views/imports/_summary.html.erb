@@ -1,0 +1,27 @@
+<div class="import-summary-grid">
+  <div class="summary-card">
+    <h2>ストーリー</h2>
+    <p class="summary-value"><%= number_with_delimiter(summary[:stories_count]) %></p>
+    <p class="summary-sub">ラベル種類 <%= summary[:labels_count] %> 件</p>
+  </div>
+  <div class="summary-card">
+    <h2>エピック</h2>
+    <p class="summary-value"><%= number_with_delimiter(summary[:epics_count]) %></p>
+    <p class="summary-sub">
+      <% if summary[:last_imported_at] %>
+        最終インポート <%= l(summary[:last_imported_at], format: :long) %>
+      <% else %>
+        インポート未実施
+      <% end %>
+    </p>
+  </div>
+  <div class="summary-card">
+    <h2>stories.xlsx</h2>
+    <% if summary[:file_present] %>
+      <p class="summary-value text-sm">存在しています</p>
+      <p class="summary-sub">最終更新 <%= l(summary[:file_updated_at], format: :long) %></p>
+    <% else %>
+      <p class="summary-value">未アップロード</p>
+    <% end %>
+  </div>
+</div>

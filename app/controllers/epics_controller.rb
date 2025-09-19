@@ -18,13 +18,11 @@ class EpicsController < ApplicationController
   private
 
   def build_summary(epics)
-    totals = epics.each_with_object({ stories: 0, accepted: 0, total_points: 0, accepted_points: 0 }) do |epic, acc|
+    epics.each_with_object({ stories: 0, accepted: 0, total_points: 0, accepted_points: 0 }) do |epic, acc|
       acc[:stories] += epic.stories_count.to_i
       acc[:accepted] += epic.accepted_count.to_i
       acc[:total_points] += epic.total_points.to_i
       acc[:accepted_points] += epic.accepted_points.to_i
     end
-
-    totals
   end
 end
