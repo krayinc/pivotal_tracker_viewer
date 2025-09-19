@@ -1,6 +1,18 @@
 class StoriesController < ApplicationController
+  PER_PAGE = 50
+
   def index
-    @stories = Story.ordered_by_import.includes(:epic).limit(100)
+    @page = params.fetch(:page, 1).to_i
+    @page = 1 if @page < 1
+
+    stories_scope = Story.ordered_by_import.includes(:epic)
+    offset = (@page - 1) * PER_PAGE
+    @stories = stories_scope.offset(offset).limit(PER_PAGE)
+    @next_page = @page + 1 if stories_scope.offset(offset + PER_PAGE).exists?
+
+    if turbo_frame_request?
+      render partial: "stories/list", locals: { stories: @stories, next_page: @next_page }, layout: false
+    end
   end
 
   def show

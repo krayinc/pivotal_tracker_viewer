@@ -1,0 +1,36 @@
+<table class="table-auto w-full border-collapse mt-4">
+  <thead>
+    <tr class="text-left border-b">
+      <th class="py-2 pr-4">タイトル</th>
+      <th class="py-2 pr-4">タイプ</th>
+      <th class="py-2 pr-4">状態</th>
+      <th class="py-2 pr-4">ポイント</th>
+      <th class="py-2 pr-4">エピック</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% stories.each do |story| %>
+      <tr class="border-b">
+        <td class="py-2 pr-4"><%= link_to story.title, story_path(story) %></td>
+        <td class="py-2 pr-4"><%= story.story_type.presence || "-" %></td>
+        <td class="py-2 pr-4"><%= story.current_state.presence || "-" %></td>
+        <td class="py-2 pr-4"><%= story.estimate.presence || "-" %></td>
+        <td class="py-2 pr-4"><%= story.epic&.name || "-" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if stories.empty? %>
+  <p class="mt-4">ストーリーが見つかりません。まずは stories.xlsx をインポートしてください。</p>
+<% elsif next_page %>
+  <div class="flex flex-col items-center gap-2 py-6">
+    <div class="text-sm text-gray-500">スクロールで自動読み込み</div>
+    <%= link_to "さらに読み込む", stories_path(page: next_page),
+                class: "px-4 py-2 bg-gray-800 text-white rounded",
+                data: { turbo_frame: "stories_list", "infinite-scroll-target": "link" } %>
+    <div class="text-sm text-gray-400" data-infinite-scroll-target="sentinel">読み込み中...</div>
+  </div>
+<% else %>
+  <p class="py-6 text-center text-gray-500">すべてのストーリーを表示しました。</p>
+<% end %>

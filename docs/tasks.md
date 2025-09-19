@@ -16,7 +16,7 @@ Rails 8 ベースの Pivotal Tracker Viewer を完成させるためのタスク
 
 ## フェーズ 2: ストーリー閲覧機能（一覧＆詳細）
 - [x] `StoriesController` 実装（index/show）
-- [ ] 一覧画面: Turbo Frame 化、ページング or 無限スクロール用 Stimulus（`InfiniteScrollController` 仮）
+- [x] 一覧画面: Turbo Frame 化、ページング or 無限スクロール用 Stimulus（`InfiniteScrollController` 仮）
 - [ ] 詳細表示: Turbo Stream モーダル or サイドペイン、Markdown レンダリング対応
 - [ ] フィルタフォーム: フリーテキスト、ラベル/タイプ/状態/優先度/担当者/日付レンジ
 - [ ] フィルタ適用ロジック（`StoriesQuery` PORO 等）とテスト
