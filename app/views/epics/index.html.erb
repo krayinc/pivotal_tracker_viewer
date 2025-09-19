@@ -2,6 +2,28 @@
 
 <p>エピックごとのストーリー数、受け入れ済み割合、ポイント合計を集計しています。エピックを選択するとストーリー一覧に絞り込みが適用されます。</p>
 
+<section class="epics-summary">
+  <div class="summary-card">
+    <h2>総ストーリー数</h2>
+    <p class="summary-value"><%= number_with_delimiter(@summary[:stories]) %></p>
+    <p class="summary-sub">受け入れ済み <%= @summary[:accepted] %> 件</p>
+  </div>
+  <div class="summary-card">
+    <h2>受け入れ進捗</h2>
+    <div class="summary-progress">
+      <div class="summary-progress__bar">
+        <div class="summary-progress__fill" style="width: <%= epic_summary_progress(@summary) %>%"></div>
+      </div>
+      <span class="summary-progress__text"><%= @summary[:accepted] %> / <%= @summary[:stories] %></span>
+    </div>
+  </div>
+  <div class="summary-card">
+    <h2>ポイント合計</h2>
+    <p class="summary-value"><%= @summary[:total_points] %> pt</p>
+    <p class="summary-sub">Accepted: <%= @summary[:accepted_points] %> pt</p>
+  </div>
+</section>
+
 <section class="epics-layout">
   <div class="epics-table-wrapper">
     <table class="epics-table">

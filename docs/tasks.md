@@ -26,7 +26,7 @@ Rails 8 ベースの Pivotal Tracker Viewer を完成させるためのタスク
 - [x] `EpicsController` / ビュー実装
 - [x] エピック進捗集計（accepted 比率、ポイント合計）ロジック
 - [x] エピック選択でストーリー一覧へフィルタ連携
-- [ ] 必要に応じた追加 UI（グラフ表示など）の検討
+- [x] 必要に応じた追加 UI（グラフ表示など）の検討
 
 ## フェーズ 4: 設定・インポート UI
 - [ ] `ImportsController` 実装（新規/作成/削除）

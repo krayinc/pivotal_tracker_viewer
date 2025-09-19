@@ -247,6 +247,67 @@
   margin-top: 1.5rem;
 }
 
+.epics-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.summary-card {
+  border: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.summary-card h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: #374151;
+}
+
+.summary-value {
+  font-size: 2rem;
+  margin: 0;
+  font-weight: 700;
+  color: #111827;
+}
+
+.summary-sub {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.summary-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.summary-progress__bar {
+  flex: 1;
+  height: 0.6rem;
+  background: #e5e7eb;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.summary-progress__fill {
+  height: 100%;
+  background: linear-gradient(90deg, #60a5fa 0%, #2563eb 100%);
+}
+
+.summary-progress__text {
+  font-size: 0.85rem;
+  color: #374151;
+  font-variant-numeric: tabular-nums;
+}
+
 .epics-table-wrapper {
   overflow-x: auto;
 }

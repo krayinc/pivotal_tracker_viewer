@@ -16,4 +16,11 @@ module ApplicationHelper
   def epic_progress_text(epic)
     "#{epic.accepted_count}/#{epic.stories_count}"
   end
+
+  def epic_summary_progress(summary)
+    stories = summary[:stories].to_i
+    return 0 if stories.zero?
+
+    ((summary[:accepted].to_f / stories) * 100).round
+  end
 end
