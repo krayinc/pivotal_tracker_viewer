@@ -13,6 +13,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     get stories_url
     assert_response :success
     assert_select "h1", "ストーリー一覧"
+    assert_select "form.stories-filter"
     assert_select "turbo-frame#stories_list" do
       assert_select "table tbody tr", minimum: 1
     end
@@ -33,6 +34,30 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "filters stories by keyword and state" do
+    get stories_url(filter: { q: "ログインできる", current_state: "accepted" })
+
+    assert_response :success
+    assert_select "table tbody tr", 1
+    assert_select "a", text: "ID/PWでログインできる"
+  end
+
+  test "filters stories by label and owner" do
+    get stories_url(filter: { labels: ["backend"], owners: ["Edward"] })
+
+    assert_response :success
+    assert_select "table tbody tr", 1
+    assert_select "a", text: "データの展開を unzip で行うようにする"
+  end
+
+  test "filters by created date range" do
+    get stories_url(filter: { created_from: "2017-01-01", created_to: "2018-01-01" })
+
+    assert_response :success
+    assert_select "table tbody tr", 1
+    assert_select "a", text: "アプリケーションをメンテナンス中にできる"
+  end
+
   test "infinite scroll fetches next page via turbo frame" do
     per_page = StoriesController::PER_PAGE
     base_position = Story.maximum(:import_position) || 0
@@ -49,6 +74,27 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     get stories_url(page: 2), headers: { "Turbo-Frame" => "stories_list" }
     assert_response :success
     assert_includes response.body, "追加ストーリー#{per_page}"
+  end
+
+  test "filtered pagination keeps query params" do
+    per_page = StoriesController::PER_PAGE
+    base_position = Story.maximum(:import_position) || 0
+
+    (per_page * 2).times do |i|
+      story = Story.create!(
+        tracker_id: 8_000_000 + i,
+        title: "backend story #{i}",
+        story_type: "feature",
+        import_position: base_position + i + 10
+      )
+      story.story_labels.create!(name: "backend")
+    end
+
+    get stories_url(filter: { labels: ["backend"] }, page: 2), headers: { "Turbo-Frame" => "stories_list" }
+
+    assert_response :success
+    assert_includes response.body, "backend story #{per_page}"
+    assert_includes response.body, "filter%5Blabels%5D%5B%5D=backend"
   end
 
   test "show responds with detail frame for turbo requests" do
