@@ -7,16 +7,13 @@ export default class extends Controller {
 
   connect() {
     this.submit = this.submit.bind(this)
+    if (this.hasSearchTarget) {
+      this.filter(this.searchTarget.value)
+    }
   }
 
   search(event) {
-    const term = event.target.value.trim().toLowerCase()
-
-    this.itemTargets.forEach(element => {
-      const name = (element.dataset.name || element.textContent || "").toLowerCase()
-      const shouldHide = term.length > 0 && !name.includes(term)
-      element.classList.toggle("is-hidden", shouldHide)
-    })
+    this.filter(event.target.value)
   }
 
   toggle() {
@@ -37,5 +34,15 @@ export default class extends Controller {
       const form = this.element.closest("form")
       if (form) form.requestSubmit()
     }, delay)
+  }
+
+  filter(value) {
+    const term = (value || "").trim().toLowerCase()
+
+    this.itemTargets.forEach(element => {
+      const name = (element.dataset.name || element.textContent || "").toLowerCase()
+      const shouldHide = term.length > 0 && !name.includes(term)
+      element.classList.toggle("is-hidden", shouldHide)
+    })
   }
 }

@@ -91,7 +91,7 @@
           <div class="input-group input-group--labels" data-controller="label-filter" data-label-filter-delay-value="200">
             <div class="label-filter__header">
               <%= f.label :labels, t("stories.index.labels_label") %>
-              <%= text_field_tag :label_search, nil,
+              <%= text_field_tag :label_search, params[:label_search],
                                  placeholder: t("stories.index.labels_search_placeholder"),
                                  class: "input input--compact",
                                  data: { action: "keydown->label-filter#preventSubmit input->label-filter#search", label_filter_target: "search" } %>
