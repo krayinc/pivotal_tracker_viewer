@@ -371,6 +371,10 @@ main {
   transition: all 0.15s ease;
 }
 
+.label-token.is-hidden {
+  display: none !important;
+}
+
 .label-token:hover {
   border-color: var(--primary);
   color: var(--primary);

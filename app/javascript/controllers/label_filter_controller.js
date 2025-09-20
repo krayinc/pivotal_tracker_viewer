@@ -14,7 +14,8 @@ export default class extends Controller {
 
     this.itemTargets.forEach(element => {
       const name = (element.dataset.name || element.textContent || "").toLowerCase()
-      element.hidden = term.length > 0 && !name.includes(term)
+      const shouldHide = term.length > 0 && !name.includes(term)
+      element.classList.toggle("is-hidden", shouldHide)
     })
   }
 
