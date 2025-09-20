@@ -395,6 +395,11 @@ main {
   gap: 12px;
 }
 
+.label-filter__header label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
 .label-filter__content {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
