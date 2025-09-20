@@ -59,7 +59,7 @@
 
       <%= form_with url: stories_path, method: :get, scope: :filter, local: true, class: "filter-card" do |f| %>
         <div class="filter-grid">
-          <div class="input-group">
+          <div class="input-group input-group--wide">
             <%= f.label :q, t("stories.index.keyword_label") %>
             <%= f.search_field :q, value: @filter_params[:q], placeholder: t("stories.index.keyword_placeholder"), class: "input" %>
           </div>
