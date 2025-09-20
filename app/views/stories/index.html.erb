@@ -58,37 +58,41 @@
       </header>
 
       <%= form_with url: stories_path, method: :get, scope: :filter, local: true, class: "filter-card" do |f| %>
-        <div class="filter-grid">
-          <div class="input-group input-group--wide">
-            <%= f.label :q, t("stories.index.keyword_label") %>
-            <%= f.search_field :q, value: @filter_params[:q], placeholder: t("stories.index.keyword_placeholder"), class: "input" %>
-          </div>
+        <div class="filter-grid filter-grid--two-columns">
+          <section class="filter-section filter-section--basic">
+            <div class="input-group input-group--wide">
+              <%= f.label :q, t("stories.index.keyword_label") %>
+              <%= f.search_field :q, value: @filter_params[:q], placeholder: t("stories.index.keyword_placeholder"), class: "input" %>
+            </div>
 
-          <div class="input-group">
-            <%= f.label :story_type, t("stories.index.story_type_label") %>
-            <%= f.select :story_type,
-                         options_for_select(@available_story_types, @filter_params[:story_type]),
-                         { include_blank: t("stories.index.no_selection") },
-                         class: "input" %>
-          </div>
+            <div class="filter-row">
+              <div class="input-group">
+                <%= f.label :story_type, t("stories.index.story_type_label") %>
+                <%= f.select :story_type,
+                             options_for_select(@available_story_types, @filter_params[:story_type]),
+                             { include_blank: t("stories.index.no_selection") },
+                             class: "input" %>
+              </div>
 
-          <div class="input-group">
-            <%= f.label :current_state, t("stories.index.state_label") %>
-            <%= f.select :current_state,
-                         options_for_select(@available_states, @filter_params[:current_state]),
-                         { include_blank: t("stories.index.no_selection") },
-                         class: "input" %>
-          </div>
+              <div class="input-group">
+                <%= f.label :current_state, t("stories.index.state_label") %>
+                <%= f.select :current_state,
+                             options_for_select(@available_states, @filter_params[:current_state]),
+                             { include_blank: t("stories.index.no_selection") },
+                             class: "input" %>
+              </div>
 
-          <div class="input-group">
-            <%= f.label :priority, t("stories.index.priority_label") %>
-            <%= f.select :priority,
-                         options_for_select(@available_priorities, @filter_params[:priority]),
-                         { include_blank: t("stories.index.no_selection") },
-                         class: "input" %>
-          </div>
+              <div class="input-group">
+                <%= f.label :priority, t("stories.index.priority_label") %>
+                <%= f.select :priority,
+                             options_for_select(@available_priorities, @filter_params[:priority]),
+                             { include_blank: t("stories.index.no_selection") },
+                             class: "input" %>
+              </div>
+            </div>
+          </section>
 
-          <div class="input-group input-group--labels" data-controller="label-filter" data-label-filter-delay-value="200">
+          <section class="filter-section filter-section--labels" data-controller="label-filter" data-label-filter-delay-value="200">
             <div class="label-filter__header">
               <%= f.label :labels, t("stories.index.labels_label") %>
               <%= text_field_tag :label_search, params[:label_search],
@@ -107,37 +111,45 @@
                 </label>
               <% end %>
             </div>
-          </div>
+          </section>
 
-          <div class="input-group input-group--multiselect">
-            <%= f.label :owners, t("stories.index.owners_label") %>
-            <%= f.select :owners,
-                         options_for_select(@available_owners, @filter_params[:owners]),
-                         {},
-                         multiple: true,
-                         size: 4,
-                         class: "input input--multiselect" %>
-          </div>
+          <section class="filter-section filter-section--people">
+            <div class="input-group input-group--full">
+              <%= f.label :owners, t("stories.index.owners_label") %>
+              <%= f.select :owners,
+                           options_for_select(@available_owners, @filter_params[:owners]),
+                           {},
+                           multiple: true,
+                           size: 4,
+                           class: "input input--multiselect" %>
+            </div>
+          </section>
 
-          <div class="input-group">
-            <%= f.label :created_from, t("stories.index.created_from_label") %>
-            <%= f.date_field :created_from, value: @filter_params[:created_from], class: "input" %>
-          </div>
+          <section class="filter-section filter-section--dates">
+            <div class="filter-row filter-row--dates">
+              <div class="input-group input-group--date">
+                <%= f.label :created_from, t("stories.index.created_from_label") %>
+                <%= f.date_field :created_from, value: @filter_params[:created_from], class: "input input--compact" %>
+              </div>
+              <div class="filter-row__separator">–</div>
+              <div class="input-group input-group--date">
+                <%= f.label :created_to, t("stories.index.created_to_label") %>
+                <%= f.date_field :created_to, value: @filter_params[:created_to], class: "input input--compact" %>
+              </div>
+            </div>
 
-          <div class="input-group">
-            <%= f.label :created_to, t("stories.index.created_to_label") %>
-            <%= f.date_field :created_to, value: @filter_params[:created_to], class: "input" %>
-          </div>
-
-          <div class="input-group">
-            <%= f.label :accepted_from, t("stories.index.accepted_from_label") %>
-            <%= f.date_field :accepted_from, value: @filter_params[:accepted_from], class: "input" %>
-          </div>
-
-          <div class="input-group">
-            <%= f.label :accepted_to, t("stories.index.accepted_to_label") %>
-            <%= f.date_field :accepted_to, value: @filter_params[:accepted_to], class: "input" %>
-          </div>
+            <div class="filter-row filter-row--dates">
+              <div class="input-group input-group--date">
+                <%= f.label :accepted_from, t("stories.index.accepted_from_label") %>
+                <%= f.date_field :accepted_from, value: @filter_params[:accepted_from], class: "input input--compact" %>
+              </div>
+              <div class="filter-row__separator">–</div>
+              <div class="input-group input-group--date">
+                <%= f.label :accepted_to, t("stories.index.accepted_to_label") %>
+                <%= f.date_field :accepted_to, value: @filter_params[:accepted_to], class: "input input--compact" %>
+              </div>
+            </div>
+          </section>
         </div>
 
         <div class="filter-actions">

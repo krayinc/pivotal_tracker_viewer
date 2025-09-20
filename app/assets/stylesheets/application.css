@@ -279,8 +279,52 @@ main {
 
 .filter-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px 18px;
+  gap: 20px;
+}
+
+.filter-grid--two-columns {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(248, 250, 252, 0.7);
+  border: 1px solid rgba(226, 232, 240, 0.7);
+}
+
+.filter-section--basic {
+  gap: 18px;
+}
+
+.filter-section--labels {
+  gap: 16px;
+}
+
+.filter-section--people,
+.filter-section--dates {
+  gap: 16px;
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+
+.filter-row--dates {
+  grid-template-columns: minmax(0, 1fr) minmax(24px, auto) minmax(0, 1fr);
+}
+
+.filter-row__separator {
+  align-self: center;
+  justify-self: center;
+  font-size: 1.1rem;
+  color: var(--text-soft);
 }
 
 .input-group {
@@ -289,8 +333,17 @@ main {
   gap: 10px;
 }
 
-.input-group--wide {
-  grid-column: span 2;
+.input-group--wide,
+.input-group--full {
+  grid-column: 1 / -1;
+}
+
+.input-group--labels {
+  gap: 12px;
+}
+
+.input-group--date label {
+  font-size: 0.8rem;
 }
 
 .input-group label {
@@ -327,14 +380,6 @@ main {
 
 .input--multiselect {
   min-height: 140px;
-}
-
-.filter-grid .input-group:last-child:nth-child(odd) {
-  grid-column: span 2;
-}
-
-.input-group--labels {
-  gap: 12px;
 }
 
 .input--compact {
@@ -413,6 +458,7 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+  justify-content: flex-end;
 }
 
 .panel__cta {
@@ -890,6 +936,24 @@ main {
 
   .story-card {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 960px) {
+  .filter-grid--two-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-row {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-row--dates {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-row__separator {
+    display: none;
   }
 }
 
