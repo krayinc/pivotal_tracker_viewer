@@ -57,7 +57,10 @@
               <% end %>
             </div>
           <% elsif story.url.present? %>
-            <code class="detail-links__code"><%= story.url %></code>
+            <div class="detail-links">
+              <span class="detail-links__deleted"><%= t("stories.detail.url_deleted_label") %></span>
+              <code class="detail-links__code"><%= story.url %></code>
+            </div>
           <% else %>
             <%= t("common.not_available") %>
           <% end %>

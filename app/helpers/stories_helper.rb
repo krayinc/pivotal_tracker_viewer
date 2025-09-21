@@ -6,9 +6,11 @@ module StoriesHelper
 
   def local_story_url(story)
     tracker_id = story&.tracker_id.presence || tracker_id_from_url(story&.url)
-    return story.url unless tracker_id
+    return unless tracker_id
 
-    story_tracker_url(tracker_id)
+    return story_tracker_url(tracker_id) if Story.exists?(tracker_id: tracker_id)
+
+    nil
   end
 
   def tracker_id_from_url(url)
@@ -22,13 +24,24 @@ module StoriesHelper
   def rewrite_pivotal_story_urls(text)
     return text if text.blank?
 
-    text.to_s.gsub(PIVOTAL_TRACKER_URL_REGEX) do
+    text.to_s.gsub(PIVOTAL_TRACKER_URL_REGEX) do |match|
       tracker_id = Regexp.last_match(1)
-      story_tracker_url(tracker_id)
+      if Story.exists?(tracker_id: tracker_id)
+        story_tracker_url(tracker_id)
+      else
+        deleted_story_reference(match, tracker_id)
+      end
     end
   end
 
   def render_story_markdown(text)
     render_markdown(rewrite_pivotal_story_urls(text))
+  end
+
+  private
+
+  def deleted_story_reference(original_url, tracker_id)
+    message = I18n.t("stories.detail.deleted_story_reference", id: tracker_id)
+    "#{message} (`#{original_url}`)"
   end
 end
