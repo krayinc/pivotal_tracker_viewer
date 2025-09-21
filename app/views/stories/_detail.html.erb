@@ -50,11 +50,14 @@
               <%= link_to t("stories.detail.url_in_app"), local_url, data: { turbo_frame: "story_detail" } %>
               <% if story.url.present? && story.url != local_url %>
                 <span class="detail-links__separator">·</span>
-                <%= link_to t("stories.detail.url_original"), story.url, target: "_blank", rel: "noopener" %>
+                <code class="detail-links__code"><%= story.url %></code>
+              <% elsif story.url.present? %>
+                <span class="detail-links__separator">·</span>
+                <code class="detail-links__code"><%= story.url %></code>
               <% end %>
             </div>
           <% elsif story.url.present? %>
-            <%= link_to story.url, story.url, target: "_blank", rel: "noopener" %>
+            <code class="detail-links__code"><%= story.url %></code>
           <% else %>
             <%= t("common.not_available") %>
           <% end %>
@@ -67,7 +70,7 @@
     <h3><%= t("stories.detail.description") %></h3>
     <% if story.description.present? %>
       <div class="markdown">
-        <%= render_markdown(story.description) %>
+        <%= render_story_markdown(story.description) %>
       </div>
     <% else %>
       <p class="detail-empty"><%= t("stories.detail.no_description") %></p>
@@ -170,7 +173,7 @@
             </div>
             <% if comment.body.present? %>
               <div class="markdown">
-                <%= render_markdown(comment.body) %>
+                <%= render_story_markdown(comment.body) %>
               </div>
             <% else %>
               <p class="detail-empty"><%= t("stories.detail.comments_empty_body") %></p>
