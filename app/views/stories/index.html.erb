@@ -45,12 +45,13 @@
   </section>
 
   <main class="app-layout">
-    <section class="panel stories-panel">
-      <header class="panel__header">
-        <div>
-          <h2><%= t("stories.index.search_heading") %></h2>
-          <p><%= t("stories.index.search_subheading") %></p>
-        </div>
+    <div class="stories-split" data-controller="split" data-split-min-left-value="360" data-split-min-right-value="320">
+      <section class="panel stories-panel" data-split-target="paneLeft">
+        <header class="panel__header">
+          <div>
+            <h2><%= t("stories.index.search_heading") %></h2>
+            <p><%= t("stories.index.search_subheading") %></p>
+          </div>
         <div class="chip-group">
           <span class="chip"><%= t("stories.index.chip_latest", count: StoriesController::PER_PAGE) %></span>
           <span class="chip chip--muted"><%= t("stories.index.chip_auto") %></span>
@@ -164,12 +165,15 @@
       </div>
     </section>
 
-    <aside class="panel detail-panel">
+      <div class="stories-divider" data-split-target="handle" data-action="pointerdown->split#start"></div>
+
+      <aside class="panel detail-panel" data-split-target="paneRight">
       <%= turbo_frame_tag "story_detail" do %>
         <div class="detail-placeholder">
           <p><%= t("stories.index.placeholder_detail") %></p>
         </div>
       <% end %>
-    </aside>
+      </aside>
+    </div>
   </main>
 </div>

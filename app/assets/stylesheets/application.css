@@ -224,10 +224,7 @@ main {
 
 /* Panels */
 .app-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
-  gap: clamp(22px, 3vw, 32px);
-  align-items: start;
+  display: block;
 }
 
 .panel {
@@ -239,6 +236,55 @@ main {
   display: flex;
   flex-direction: column;
   gap: clamp(20px, 3vw, 24px);
+}
+
+.stories-split {
+  --stories-divider-width: 12px;
+  --stories-left-width: 2fr;
+  --stories-min-left: 360px;
+  --stories-min-right: 320px;
+  display: grid;
+  grid-template-columns: minmax(var(--stories-min-left), var(--stories-left-width)) var(--stories-divider-width) minmax(var(--stories-min-right), 1fr);
+  gap: 0;
+  align-items: stretch;
+  position: relative;
+}
+
+.stories-split.is-resizing {
+  user-select: none;
+  cursor: col-resize;
+}
+
+.stories-divider {
+  width: var(--stories-divider-width);
+  cursor: col-resize;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+}
+
+.stories-divider::before {
+  content: "";
+  width: 4px;
+  height: 48px;
+  border-radius: 9999px;
+  background: rgba(148, 163, 184, 0.5);
+  transition: background 0.2s ease;
+}
+
+.stories-divider.is-active::before,
+.stories-divider:hover::before {
+  background: rgba(37, 99, 235, 0.6);
+}
+
+.stories-panel {
+  min-width: 0;
+}
+
+.detail-panel {
+  min-width: 0;
 }
 
 .panel--muted {
