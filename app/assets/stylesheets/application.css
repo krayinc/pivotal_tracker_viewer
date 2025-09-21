@@ -548,6 +548,7 @@ main {
   padding: 18px 20px;
   box-shadow: 0 24px 50px -42px rgba(37, 99, 235, 0.35);
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  cursor: pointer;
 }
 
 .story-card:hover {
@@ -561,6 +562,7 @@ main {
   font-size: 1.1rem;
   font-weight: 650;
 }
+
 
 .story-card__meta {
   display: flex;
@@ -584,9 +586,24 @@ main {
 }
 
 .story-card__tags li {
+  margin: 0;
+}
+
+.story-card__tags button {
+  border: none;
   background: rgba(226, 232, 240, 0.55);
+  color: #475569;
   border-radius: 9999px;
   padding: 4px 8px;
+  font: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.story-card__tags button:hover,
+.story-card__tags button:focus-visible {
+  background: rgba(148, 163, 184, 0.35);
+  outline: none;
 }
 
 .story-card__aside {
@@ -606,6 +623,8 @@ main {
   background: rgba(37, 99, 235, 0.08);
   color: var(--primary);
   font-weight: 600;
+  border: none;
+  font: inherit;
 }
 
 .story-card__badge--epic {
@@ -616,6 +635,18 @@ main {
 .story-card__badge--owner {
   background: rgba(148, 163, 184, 0.18);
   color: var(--text-muted);
+  cursor: pointer;
+}
+
+.story-card__badge--owner:hover,
+.story-card__badge--owner:focus-visible {
+  background: rgba(148, 163, 184, 0.28);
+  outline: none;
+}
+
+.story-card__badge--static {
+  cursor: default;
+  pointer-events: none;
 }
 
 .story-list__empty,

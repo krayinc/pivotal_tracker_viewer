@@ -2,7 +2,7 @@
 
 <div class="story-cards">
   <% stories.each do |story| %>
-    <article class="story-card">
+    <article class="story-card" data-controller="story-card" data-story-card-url-value="<%= story_path(story) %>" data-action="click->story-card#open keydown->story-card#openWithKey" tabindex="0" role="button" aria-label="<%= story.title %>">
       <div class="story-card__body">
         <h3 class="story-card__title">
           <%= link_to story.title, story_path(story), data: { turbo_frame: "story_detail" } %>
@@ -20,7 +20,9 @@
         <% if story.story_labels.any? %>
           <ul class="story-card__tags">
             <% story.story_labels.first(6).each do |label| %>
-              <li><%= label.name %></li>
+              <li>
+                <button type="button" data-action="story-card#applyLabel" data-story-card-label-param="<%= label.name %>"><%= label.name %></button>
+              </li>
             <% end %>
             <% if story.story_labels.size > 6 %>
               <li>…</li>
@@ -36,10 +38,10 @@
           <span class="story-card__badge"><%= t("stories.detail.points", points: story.estimate) %></span>
         <% end %>
         <% story.story_ownerships.first(3).each do |ownership| %>
-          <span class="story-card__badge story-card__badge--owner"><%= ownership.owner_name %></span>
+          <button type="button" class="story-card__badge story-card__badge--owner" data-action="story-card#applyOwner" data-story-card-owner-param="<%= ownership.owner_name %>"><%= ownership.owner_name %></button>
         <% end %>
         <% if story.story_ownerships.size > 3 %>
-          <span class="story-card__badge story-card__badge--owner">…</span>
+          <span class="story-card__badge story-card__badge--owner story-card__badge--static">…</span>
         <% end %>
       </div>
     </article>
