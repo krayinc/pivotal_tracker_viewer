@@ -50,6 +50,22 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     assert_select "a", text: "データの展開を unzip で行うようにする"
   end
 
+  test "show by tracker redirects to show" do
+    story = Story.first
+    get story_tracker_url(story.tracker_id)
+
+    assert_redirected_to story_url(story)
+  end
+
+  test "show by tracker renders turbo frame" do
+    story = Story.first
+
+    get story_tracker_url(story.tracker_id), headers: { "Turbo-Frame" => "story_detail" }
+
+    assert_response :success
+    assert_includes @response.body, story.title
+  end
+
   test "filters stories by multiple labels using AND" do
     base_position = Story.maximum(:import_position).to_i + 1
 

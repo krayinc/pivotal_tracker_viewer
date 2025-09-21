@@ -23,11 +23,15 @@ export default class extends Controller {
     const value = event.params.label
     if (!value) return
 
-    const input = this.filterForm?.querySelector(`input[name="filter[labels][]"][value="${this.cssEscape(value)}"]`)
-    if (!input) return
+    const form = this.filterForm
+    if (!form) return
 
-    if (!input.checked) input.checked = true
-    this.filterForm.requestSubmit()
+    const inputs = form.querySelectorAll('input[name="filter[labels][]"]')
+    inputs.forEach(input => {
+      input.checked = input.value === value
+    })
+
+    form.requestSubmit()
   }
 
   applyOwner(event) {
@@ -36,14 +40,17 @@ export default class extends Controller {
     const value = event.params.owner
     if (!value) return
 
-    const select = this.filterForm?.querySelector('select[name="filter[owners][]"]')
+    const form = this.filterForm
+    if (!form) return
+
+    const select = form.querySelector('select[name="filter[owners][]"]')
     if (!select) return
 
-    const option = Array.from(select.options).find(opt => opt.value === value)
-    if (!option) return
+    Array.from(select.options).forEach(option => {
+      option.selected = option.value == value
+    })
 
-    option.selected = true
-    this.filterForm.requestSubmit()
+    form.requestSubmit()
   }
 
   shouldIgnore(event) {
@@ -68,10 +75,4 @@ export default class extends Controller {
     return this._filterForm
   }
 
-  cssEscape(value) {
-    if (window.CSS && typeof window.CSS.escape === "function") {
-      return window.CSS.escape(value)
-    }
-    return value.replace(/[\0-\x1F\x7F"'\\]/g, "\\$&")
-  }
 }

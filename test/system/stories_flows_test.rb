@@ -32,6 +32,14 @@ class StoriesFlowsTest < ApplicationSystemTestCase
       assert_text "ID/PWでログインできる"
       assert_text "ログインして、ユーザー名が表示されるのを確認しました"
     end
+
+    if page.has_selector?(".story-card__tags button", wait: 1)
+      label_button = first(".story-card__tags button")
+      label = label_button.text
+      label_button.click
+      checkbox = find("input[name='filter[labels][]'][value='#{label}']", visible: :all)
+      assert checkbox.checked?
+    end
   end
 
   test "stories.xlsx を UI からインポートできる" do

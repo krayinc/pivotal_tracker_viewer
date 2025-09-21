@@ -21,26 +21,37 @@ class StoriesController < ApplicationController
     end
   end
 
+  STORY_DETAIL_INCLUDES = [
+    :epic,
+    :story_labels,
+    :story_ownerships,
+    :story_tasks,
+    :story_blockers,
+    :story_pull_requests,
+    :story_branches,
+    :story_comments
+  ].freeze
+
   def show
-    @story = Story
-      .includes(
-        :epic,
-        :story_labels,
-        :story_ownerships,
-        :story_tasks,
-        :story_blockers,
-        :story_pull_requests,
-        :story_branches,
-        :story_comments
-      )
-      .find(params[:id])
+    @story = stories_with_details.find(params[:id])
+
+    render_detail_frame if turbo_frame_request?
+  end
+
+  def show_by_tracker
+    @story = stories_with_details.find_by!(tracker_id: params[:tracker_id])
 
     if turbo_frame_request?
-      render partial: "stories/detail_frame", locals: { story: @story, standalone: false }, layout: false
+      render_detail_frame
+    else
+      redirect_to story_path(@story)
     end
   end
 
   private
+  def render_detail_frame
+    render partial: "stories/detail_frame", locals: { story: @story, standalone: false }, layout: false
+  end
 
   def filtered_params
     permitted = params.fetch(:filter, {}).permit(
@@ -85,5 +96,9 @@ class StoriesController < ApplicationController
       owners_count: StoryOwnership.distinct.count(:owner_name),
       last_imported_at: stories_scope.maximum(:updated_at)
     }
+  end
+
+  def stories_with_details
+    Story.includes(STORY_DETAIL_INCLUDES)
   end
 end

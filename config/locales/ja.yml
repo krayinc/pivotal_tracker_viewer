@@ -103,6 +103,8 @@ ja:
       created_at: "作成日"
       accepted_at: "受け入れ日"
       url: "URL"
+      url_in_app: "このアプリで表示"
+      url_original: "Pivotal Tracker で開く"
       description: "説明"
       no_description: "説明がありません。"
       owners: "担当者"

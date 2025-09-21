@@ -44,7 +44,16 @@
       <div>
         <dt><%= t("stories.detail.url") %></dt>
         <dd>
-          <% if story.url.present? %>
+          <% local_url = local_story_url(story) %>
+          <% if local_url.present? %>
+            <div class="detail-links">
+              <%= link_to t("stories.detail.url_in_app"), local_url, data: { turbo_frame: "story_detail" } %>
+              <% if story.url.present? && story.url != local_url %>
+                <span class="detail-links__separator">·</span>
+                <%= link_to t("stories.detail.url_original"), story.url, target: "_blank", rel: "noopener" %>
+              <% end %>
+            </div>
+          <% elsif story.url.present? %>
             <%= link_to story.url, story.url, target: "_blank", rel: "noopener" %>
           <% else %>
             <%= t("common.not_available") %>
