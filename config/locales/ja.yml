@@ -107,6 +107,7 @@ ja:
       url_original: "Pivotal Tracker で開く"
       url_deleted_label: "削除済みストーリー"
       url_deleted_reference: "削除済みのストーリー (ID %{id})"
+      deleted_story_reference: "削除済みのストーリー (ID %{id})"
       description: "説明"
       no_description: "説明がありません。"
       owners: "担当者"
