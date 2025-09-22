@@ -43,7 +43,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "filters stories by label and owner" do
-    get stories_url(filter: { labels: ["backend"], owners: ["Edward"] })
+    get stories_url(filter: { labels: [ "backend" ], owners: [ "Edward" ] })
 
     assert_response :success
     assert_select ".story-card", 1
@@ -135,7 +135,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       story.story_labels.create!(name: "backend")
     end
 
-    get stories_url(filter: { labels: ["backend"] }, page: 2), headers: { "Turbo-Frame" => "stories_list" }
+    get stories_url(filter: { labels: [ "backend" ] }, page: 2), headers: { "Turbo-Frame" => "stories_list" }
 
     assert_response :success
     assert_includes response.body, "backend story #{per_page}"

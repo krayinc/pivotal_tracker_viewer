@@ -46,7 +46,7 @@ class CreateStoriesAndRelated < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :story_ownerships, [:story_id, :position]
+    add_index :story_ownerships, [ :story_id, :position ]
 
     create_table :story_labels do |t|
       t.references :story, null: false, foreign_key: true
@@ -55,7 +55,7 @@ class CreateStoriesAndRelated < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :story_labels, [:story_id, :name], unique: true
+    add_index :story_labels, [ :story_id, :name ], unique: true
 
     create_table :story_comments do |t|
       t.references :story, null: false, foreign_key: true
@@ -67,7 +67,7 @@ class CreateStoriesAndRelated < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :story_comments, [:story_id, :position]
+    add_index :story_comments, [ :story_id, :position ]
 
     create_table :story_tasks do |t|
       t.references :story, null: false, foreign_key: true
@@ -79,7 +79,7 @@ class CreateStoriesAndRelated < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :story_tasks, [:story_id, :position]
+    add_index :story_tasks, [ :story_id, :position ]
 
     create_table :story_blockers do |t|
       t.references :story, null: false, foreign_key: true
@@ -113,6 +113,6 @@ class CreateStoriesAndRelated < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :story_branches, [:story_id, :name], unique: true
+    add_index :story_branches, [ :story_id, :name ], unique: true
   end
 end

@@ -22,6 +22,6 @@ class EpicsControllerTest < ActionDispatch::IntegrationTest
     epic = Epic.where.not(label: nil).first
 
     get epics_url
-    assert_select "a[href=?]", stories_path(filter: { labels: [epic.label] })
+    assert_select "a[href=?]", stories_path(filter: { labels: [ epic.label ] })
   end
 end

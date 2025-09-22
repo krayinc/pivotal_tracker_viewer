@@ -17,17 +17,17 @@ class StoriesQueryTest < ActiveSupport::TestCase
 
   test "filters by keyword" do
     result = query(q: "ログインできる")
-    assert_equal [61531244], result.pluck(:tracker_id)
+    assert_equal [ 61531244 ], result.pluck(:tracker_id)
   end
 
   test "filters by label" do
-    result = query(labels: ["backend"])
-    assert_equal [185533815], result.pluck(:tracker_id)
+    result = query(labels: [ "backend" ])
+    assert_equal [ 185533815 ], result.pluck(:tracker_id)
   end
 
   test "filters by owner" do
-    result = query(owners: ["Edward"])
-    assert_equal [185533815], result.pluck(:tracker_id)
+    result = query(owners: [ "Edward" ])
+    assert_equal [ 185533815 ], result.pluck(:tracker_id)
   end
 
   test "filters by story type" do
@@ -42,12 +42,12 @@ class StoriesQueryTest < ActiveSupport::TestCase
 
   test "filters by created date range" do
     result = query(created_from: "2017-01-01", created_to: "2018-01-01")
-    assert_equal [150290098], result.pluck(:tracker_id)
+    assert_equal [ 150290098 ], result.pluck(:tracker_id)
   end
 
   test "filters by accepted date range" do
     result = query(accepted_from: "2023-01-01", accepted_to: "2023-12-31")
-    assert_equal [185533815], result.pluck(:tracker_id)
+    assert_equal [ 185533815 ], result.pluck(:tracker_id)
   end
 
   test "combined filters intersect" do
@@ -55,12 +55,12 @@ class StoriesQueryTest < ActiveSupport::TestCase
       q: "ログイン",
       story_type: "feature",
       current_state: "accepted",
-      owners: ["Charlie"],
+      owners: [ "Charlie" ],
       created_to: "2014-01-01"
     }
 
     result = query(params)
-    assert_equal [61531244], result.pluck(:tracker_id)
+    assert_equal [ 61531244 ], result.pluck(:tracker_id)
   end
 
   test "invalid date values are ignored" do
@@ -69,7 +69,7 @@ class StoriesQueryTest < ActiveSupport::TestCase
   end
 
   test "distinct results when joining labels" do
-    result = query(labels: ["backend", "保守"])
-    assert_equal [185533815], result.pluck(:tracker_id)
+    result = query(labels: [ "backend", "保守" ])
+    assert_equal [ 185533815 ], result.pluck(:tracker_id)
   end
 end
